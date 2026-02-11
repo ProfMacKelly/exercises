@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contract Law Defenses - Quiz</title>
+    <style>
+        /* Keeping your original styles for consistency */
+        @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@600;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap');
+
+        :root {
+            --bg: #f6f1e7;
+            --bg-deep: #efe4d6;
+            --ink: #171717;
+            --muted: #5b5b5b;
+            --accent: #2c7bd3; /* Changed to Blue for a legal theme */
+            --accent-light: #5a9fff;
+            --accent-dark: #2056b1;
+            --teal: #1f6f78;
+            --card: #fff7ef;
+            --stroke: #e3d6c5;
+            --shadow: 0 18px 40px rgba(23, 23, 23, 0.12);
+            --radius-sm: 10px;
+            --radius-md: 12px;
+            --radius-lg: 14px;
+            --radius-xl: 18px;
+            --radius-2xl: 22px;
+            --space-10: 32px;
+            --space-8: 20px;
+            --font-display: 'Space Grotesk', sans-serif;
+            --font-body: 'IBM Plex Sans', sans-serif;
+            --error: #b54832;
+        }
+
+        body {
+            font-family: var(--font-body);
+            background: linear-gradient(180deg, var(--bg) 0%, var(--bg-deep) 100%);
+            color: var(--ink);
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .quiz-container {
+            width: 100%;
+            max-width: 800px;
+            padding: var(--space-10) var(--space-8);
+            box-sizing: border-box;
+            background: var(--card);
+            border-radius: var(--radius-2xl);
+            border: 1px solid var(--stroke);
+            box-shadow: var(--shadow);
+        }
+
+        .progress-container { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; }
+        .progress-text { color: var(--muted); font-size: 0.9em; }
+        .status-bar { display: flex; gap: 16px; font-size: 0.9em; font-weight: 500; }
+        .status-item { display: flex; align-items: center; gap: 6px; }
+        .status-correct { color: var(--teal); }
+        .status-wrong { color: var(--error); }
+        .question-text { font-family: var(--font-display); font-size: 1.5em; font-weight: 600; margin-bottom: 32px; line-height: 1.4; }
+        .options-list { list-style: none; padding: 0; display: flex; flex-direction: column; gap: 12px; }
+        .option-item { background-color: #fff; border: 1px solid var(--stroke); padding: 12px 16px; border-radius: var(--radius-lg); cursor: pointer; transition: all 0.2s ease; }
+        .option-item:hover:not(.selected) { background-color: var(--card); transform: translateY(-1px); box-shadow: 0 10px 18px rgba(23, 23, 23, 0.12); }
+        .option-item.selected.correct { background-color: rgba(31, 111, 120, 0.12); border-color: var(--teal); }
+        .option-item.selected.incorrect { background-color: rgba(181, 72, 50, 0.12); border-color: var(--error); }
+        .option-item.revealed-correct { border-color: rgba(31, 111, 120, 0.5); }
+        .feedback-state { font-weight: bold; font-size: 0.9em; display: none; margin-top: 4px; }
+        .selected .feedback-state, .revealed-correct .feedback-state { display: block; }
+        .correct .feedback-state, .revealed-correct .feedback-state { color: var(--teal); }
+        .incorrect .feedback-state { color: var(--error); }
+        .rationale { font-size: 0.95em; color: var(--muted); margin-top: 4px; line-height: 1.5; display: none; }
+        .selected .rationale, .revealed-correct .rationale { display: block; }
+        .hint-content { margin-top: 32px; padding: 16px; background-color: #fff; border: 1px solid var(--stroke); border-radius: var(--radius-lg); display: none; gap: 16px; }
+        .hint-content.active { display: flex; }
+        .navigation { margin-top: 32px; display: flex; justify-content: space-between; align-items: center; }
+        .btn { border-radius: var(--radius-md); padding: 10px 20px; font-size: 0.95em; cursor: pointer; border: 1px solid transparent; }
+        .btn-prev { background-color: #fff; border-color: var(--stroke); }
+        .btn-next { background: linear-gradient(90deg, var(--accent), var(--accent-light)); color: #fff; }
+        .hidden { display: none; }
+    </style>
+</head>
+<body>
+    <div class="quiz-container">
+        <div id="quiz-content"></div>
+        <div id="results-content" class="hidden"></div>
+        <div id="hint-box" class="hint-content">
+            <div style="font-size: 1.2em;">💡</div>
+            <div id="hint-text"></div>
+        </div>
+        <div class="navigation">
+            <button id="hint-toggle" class="btn btn-prev">Toggle Hint</button>
+            <div class="nav-buttons">
+                <button id="prev-btn" class="btn btn-prev">Previous</button>
+                <button id="next-btn" class="btn btn-next">Next</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const quizData = [
+            {
+                "question": "A defendant argues that a contract for the sale of land is unenforceable because it was never put in writing. Which defense is being used?",
+                "hint": "This legal doctrine requires certain types of contracts to be written to be valid.",
+                "answerOptions": [
+                    { "text": "Statute of Frauds", "isCorrect": true, "rationale": "The Statute of Frauds requires contracts involving real estate, or those that cannot be performed within one year, to be in writing." },
+                    { "text": "Parol Evidence Rule", "isCorrect": false, "rationale": "This rule prevents parties from introducing outside evidence to contradict a finished written contract, but it isn't a defense based on the lack of a writing." },
+                    { "text": "Novation", "isCorrect": false, "rationale": "Novation is the substitution of a new contract in place of an old one." }
+                ]
+            },
+            {
+                "question": "If a party is forced into a contract via a threat of physical harm, the contract is voidable under which defense?",
+                "hint": "Think about the lack of free will during the signing process.",
+                "answerOptions": [
+                    { "text": "Undue Influence", "isCorrect": false, "rationale": "Undue influence involves unfair persuasion (usually in a relationship), but not necessarily a direct threat of harm." },
+                    { "text": "Duress", "isCorrect": true, "rationale": "Duress occurs when a party enters a contract because of a wrongful threat, depriving them of free will." },
+                    { "text": "Frustration of Purpose", "isCorrect": false, "rationale": "This refers to events that make the contract's primary purpose valueless, not the conditions of signing." }
+                ]
+            },
+            {
+                "question": "A contract is signed where the terms are so extremely one-sided and unfair that they 'shock the conscience.' This is known as:",
+                "hint": "This defense often protects consumers with significantly less bargaining power.",
+                "answerOptions": [
+                    { "text": "Mutual Mistake", "isCorrect": false, "rationale": "Mutual mistake is when both parties are wrong about a fundamental fact of the deal." },
+                    { "text": "Unconscionability", "isCorrect": true, "rationale": "Unconscionability allows a court to refuse enforcement of a contract that is excessively unfair to one party." },
+                    { "text": "Anticipatory Repudiation", "isCorrect": false, "rationale": "This is a declaration by a party that they do not intend to live up to their obligations before the time for performance." }
+                ]
+            },
+            {
+                "question": "Which defense applies when an unforeseen event, such as a natural disaster, makes it physically impossible for a party to fulfill their obligations?",
+                "hint": "It literally cannot be done.",
+                "answerOptions": [
+                    { "text": "Impracticability", "isCorrect": false, "rationale": "Impracticability is when performance becomes excessively difficult/expensive, but not strictly impossible." },
+                    { "text": "Impossibility of Performance", "isCorrect": true, "rationale": "Impossibility applies when the subject matter of the contract is destroyed or the performance becomes objectively impossible." },
+                    { "text": "Laches", "isCorrect": false, "rationale": "Laches is a defense based on an unreasonable delay in bringing a claim." }
+                ]
+            }
+        ];
+
+        let currentIndex = 0;
+        let mode = 'quiz';
+        let state = quizData.map(() => ({ selectedIndex: null, hintVisible: false }));
+
+        function getStats() {
+            const answered = state.filter(s => s.selectedIndex !== null).length;
+            const correct = state.filter((s, i) => s.selectedIndex !== null && quizData[i].answerOptions[s.selectedIndex].isCorrect).length;
+            const wrong = answered - correct;
+            const accuracy = answered > 0 ? Math.round((correct / answered) * 100) : 0;
+            return { answered, correct, wrong, accuracy };
+        }
+
+        function renderQuestion() {
+            const q = quizData[currentIndex];
+            const s = state[currentIndex];
+            const content = document.getElementById('quiz-content');
+            const stats = getStats();
+
+            let optionsHtml = q.answerOptions.map((opt, idx) => {
+                const isSelected = s.selectedIndex === idx;
+                const statusClass = isSelected ? (opt.isCorrect ? 'correct' : 'incorrect') : '';
+                const revealClass = (s.selectedIndex !== null && opt.isCorrect) ? 'revealed-correct' : '';
+                return `
+                    <li class="option-item ${isSelected ? 'selected' : ''} ${statusClass} ${revealClass}" onclick="selectOption(${idx})">
+                        <strong>${String.fromCharCode(65 + idx)}.</strong> ${opt.text}
+                        <div class="feedback-state">${opt.isCorrect ? '✓ Correct' : '✕ Incorrect'}</div>
+                        <div class="rationale">${opt.rationale}</div>
+                    </li>`;
+            }).join('');
+
+            content.innerHTML = `
+                <div class="progress-container">
+                    <div class="progress-text">Question ${currentIndex + 1} of ${quizData.length}</div>
+                    <div class="status-bar">
+                        <div class="status-item status-correct">✓ ${stats.correct}</div>
+                        <div class="status-item status-wrong">✕ ${stats.wrong}</div>
+                    </div>
+                </div>
+                <div class="question-text">${q.question}</div>
+                <ul class="options-list">${optionsHtml}</ul>
+            `;
+
+            document.getElementById('hint-text').innerText = q.hint;
+            document.getElementById('hint-box').classList.toggle('active', s.hintVisible);
+            document.getElementById('prev-btn').disabled = currentIndex === 0;
+            document.getElementById('next-btn').innerText = currentIndex === quizData.length - 1 ? (mode === 'quiz' ? 'Finish' : 'Review Done') : 'Next';
+        }
+
+        window.selectOption = function(idx) {
+            if (state[currentIndex].selectedIndex === null) {
+                state[currentIndex].selectedIndex = idx;
+                renderQuestion();
+            }
+        };
+
+        document.getElementById('hint-toggle').onclick = () => {
+            state[currentIndex].hintVisible = !state[currentIndex].hintVisible;
+            renderQuestion();
+        };
+
+        document.getElementById('prev-btn').onclick = () => { if (currentIndex > 0) { currentIndex--; renderQuestion(); }};
+        document.getElementById('next-btn').onclick = () => {
+            if (currentIndex < quizData.length - 1) {
+                currentIndex++;
+                renderQuestion();
+            } else {
+                renderResults();
+            }
+        };
+
+        function renderResults() {
+            const stats = getStats();
+            document.getElementById('quiz-content').classList.add('hidden');
+            document.getElementById('hint-box').classList.add('hidden');
+            document.querySelector('.navigation').classList.add('hidden');
+            const results = document.getElementById('results-content');
+            results.classList.remove('hidden');
+            results.innerHTML = `
+                <div style="text-align: center;">
+                    <h1 class="question-text">Quiz Complete!</h1>
+                    <p>You scored ${stats.correct} out of ${quizData.length} (${stats.accuracy}%)</p>
+                    <button onclick="location.reload()" class="btn btn-next">Retake Quiz</button>
+                </div>
+            `;
+        }
+
+        renderQuestion();
+    </script>
+</body>
+</html>
