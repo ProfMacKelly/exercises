@@ -1,0 +1,646 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Business Law Today- Essentials Overview - NotebookLM - Quiz Export</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@600;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap');
+
+        :root {
+            --bg: #f6f1e7;
+            --bg-deep: #efe4d6;
+            --ink: #171717;
+            --muted: #5b5b5b;
+            --accent: #d3542c;
+            --accent-light: #ff8f5a;
+            --accent-dark: #b14320;
+            --teal: #1f6f78;
+            --card: #fff7ef;
+            --stroke: #e3d6c5;
+            --shadow: 0 18px 40px rgba(23, 23, 23, 0.12);
+            --radius-sm: 10px;
+            --radius-md: 12px;
+            --radius-lg: 14px;
+            --radius-xl: 18px;
+            --radius-2xl: 22px;
+            --space-1: 6px;
+            --space-2: 8px;
+            --space-3: 10px;
+            --space-4: 12px;
+            --space-5: 14px;
+            --space-6: 16px;
+            --space-7: 18px;
+            --space-8: 20px;
+            --space-9: 24px;
+            --space-10: 32px;
+            --font-display: 'Space Grotesk', sans-serif;
+            --font-body: 'IBM Plex Sans', sans-serif;
+            --error: #b54832;
+        }
+
+        body {
+            font-family: var(--font-body);
+            background:
+                radial-gradient(240px 140px at 10% -10%, #ffd2b9 0%, transparent 70%),
+                radial-gradient(220px 160px at 90% 0%, #cfe7e6 0%, transparent 65%),
+                linear-gradient(180deg, var(--bg) 0%, var(--bg-deep) 100%);
+            color: var(--ink);
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .quiz-container {
+            width: 100%;
+            max-width: 800px;
+            padding: var(--space-10) var(--space-8);
+            box-sizing: border-box;
+            background: var(--card);
+            border-radius: var(--radius-2xl);
+            border: 1px solid var(--stroke);
+            box-shadow: var(--shadow);
+        }
+
+        .progress-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+        }
+
+        .progress-text {
+            color: var(--muted);
+            font-size: 0.9em;
+        }
+
+        .status-bar {
+            display: flex;
+            gap: 16px;
+            font-size: 0.9em;
+            font-weight: 500;
+        }
+
+        .status-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .status-correct { color: var(--teal); }
+        .status-wrong { color: var(--error); }
+
+        .question-text {
+            font-family: var(--font-display);
+            font-size: 1.5em;
+            font-weight: 600;
+            margin-bottom: 32px;
+            line-height: 1.4;
+        }
+
+        .options-list {
+            list-style: none;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .option-item {
+            background-color: #fff;
+            border: 1px solid var(--stroke);
+            padding: var(--space-4) var(--space-6);
+            border-radius: var(--radius-lg);
+            cursor: pointer;
+            transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .option-item:hover:not(.selected) {
+            background-color: var(--card);
+            transform: translateY(-1px);
+            box-shadow: 0 10px 18px rgba(23, 23, 23, 0.12);
+        }
+
+        .option-item.selected.correct {
+            background-color: rgba(31, 111, 120, 0.12);
+            border-color: var(--teal);
+        }
+
+        .option-item.selected.incorrect {
+            background-color: rgba(181, 72, 50, 0.12);
+            border-color: var(--error);
+        }
+
+        .option-item.revealed-correct {
+            border-color: rgba(31, 111, 120, 0.5);
+            box-shadow: inset 0 0 0 1px rgba(31, 111, 120, 0.16);
+        }
+
+        .option-label {
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .feedback-state {
+            font-weight: bold;
+            font-size: 0.9em;
+            display: none;
+        }
+
+        .selected .feedback-state {
+            display: block;
+        }
+
+        .revealed-correct .feedback-state {
+            display: block;
+        }
+
+        .correct .feedback-state { color: var(--teal); }
+        .incorrect .feedback-state { color: var(--error); }
+        .revealed-correct .feedback-state { color: var(--teal); }
+
+        .rationale {
+            font-size: 0.95em;
+            color: var(--muted);
+            margin-top: 4px;
+            line-height: 1.5;
+            display: none;
+        }
+
+        .selected .rationale {
+            display: block;
+        }
+
+        .revealed-correct .rationale {
+            display: block;
+        }
+        .hint-toggle {
+            border: 1px solid var(--stroke);
+            color: var(--muted);
+            cursor: pointer;
+            padding: var(--space-2) var(--space-6);
+            border-radius: var(--radius-md);
+            background-color: #fff;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.9em;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .hint-toggle:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 10px 18px rgba(23, 23, 23, 0.12);
+        }
+
+        .hint-content {
+            margin-top: 32px;
+            padding: var(--space-6);
+            background-color: #fff;
+            border: 1px solid var(--stroke);
+            border-radius: var(--radius-lg);
+            font-size: 0.95em;
+            color: var(--muted);
+            display: none;
+            align-items: flex-start;
+            gap: 16px;
+        }
+
+        .hint-content.active {
+            display: flex;
+        }
+
+        .hint-icon-box {
+            color: var(--accent-dark);
+            font-size: 1.2em;
+            margin-top: -2px;
+        }
+
+        .navigation {
+            margin-top: 32px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-buttons {
+            display: flex;
+            gap: 12px;
+        }
+
+        .btn {
+            border-radius: var(--radius-md);
+            padding: var(--space-2) var(--space-7);
+            font-size: 0.95em;
+            font-weight: 500;
+            cursor: pointer;
+            border: 1px solid transparent;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .btn-prev {
+            background-color: #fff;
+            color: var(--ink);
+            border-color: var(--stroke);
+        }
+
+        .btn-prev:hover:not(:disabled) {
+            transform: translateY(-1px);
+            box-shadow: 0 10px 18px rgba(23, 23, 23, 0.12);
+        }
+
+        .btn-next {
+            background: linear-gradient(90deg, var(--accent), var(--accent-light));
+            color: #fff;
+        }
+
+        .btn-next:hover:not(:disabled) {
+            transform: translateY(-1px);
+            box-shadow: 0 10px 18px rgba(23, 23, 23, 0.12);
+        }
+
+        .btn:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+        }
+
+        .results-screen {
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-8);
+        }
+
+        .results-title {
+            font-family: var(--font-display);
+            font-size: 2.1em;
+            margin: 0;
+        }
+
+        .results-subtitle {
+            color: var(--muted);
+            margin: 0;
+            font-size: 1em;
+        }
+
+        .results-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: var(--space-6);
+        }
+
+        .result-card {
+            padding: var(--space-6);
+            border-radius: var(--radius-xl);
+            background: #fff;
+            border: 1px solid var(--stroke);
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-3);
+        }
+
+        .result-label {
+            color: var(--muted);
+            font-size: 0.95em;
+        }
+
+        .result-value {
+            font-size: 2em;
+            font-family: var(--font-display);
+        }
+
+        .result-metrics {
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-2);
+            color: var(--muted);
+            font-size: 0.95em;
+        }
+
+        .results-actions {
+            display: flex;
+            gap: var(--space-4);
+            flex-wrap: wrap;
+        }
+
+        .btn-ghost {
+            background-color: transparent;
+            border: 1px solid var(--stroke);
+            color: var(--ink);
+        }
+
+        .hidden { display: none; }
+
+        @media (max-width: 900px) {
+            .quiz-container {
+                margin: var(--space-8);
+                max-width: 100%;
+            }
+        }
+
+        @media (max-width: 720px) {
+            .quiz-container {
+                padding: var(--space-8) var(--space-6);
+            }
+
+            .question-text {
+                font-size: 1.3em;
+            }
+
+            .option-item {
+                padding: var(--space-4);
+            }
+        }
+
+        @media (max-width: 520px) {
+            body {
+                align-items: flex-start;
+            }
+
+            .quiz-container {
+                margin: var(--space-6);
+                padding: var(--space-7) var(--space-5);
+            }
+
+            .progress-container {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: var(--space-3);
+            }
+
+            .navigation {
+                flex-direction: column;
+                align-items: stretch;
+                gap: var(--space-4);
+            }
+
+            .nav-buttons {
+                width: 100%;
+            }
+
+            .btn {
+                width: 100%;
+            }
+
+            .hint-toggle {
+                justify-content: space-between;
+            }
+
+            .results-actions {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="quiz-container">
+        <div id="quiz-content">
+            <!-- Dynamic Content -->
+        </div>
+        <div id="results-content" class="hidden"></div>
+
+        <div id="hint-box" class="hint-content">
+            <div class="hint-icon-box">💡</div>
+            <div id="hint-text"></div>
+        </div>
+
+        <div class="navigation">
+            <button id="hint-toggle" class="hint-toggle">
+                <span>Hint</span>
+                <span id="hint-icon-arrow">▼</span>
+            </button>
+            <div class="nav-buttons">
+                <button id="prev-btn" class="btn btn-prev">Previous</button>
+                <button id="next-btn" class="btn btn-next">Next</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const quizData = [{"answerOptions":[{"isCorrect":false,"rationale":"Contract law generally ignores a party's hidden or subjective intent in favor of how a reasonable person would interpret their actions.","text":"No, because the subjective intent of the offeror was to play a joke while intoxicated."},{"isCorrect":false,"rationale":"While the offeree's state of mind matters for acceptance, the effectiveness of the offer itself depends on the offeror's objective manifestations.","text":"Yes, but only if Bill can prove he was completely sober at the time of the transaction."},{"isCorrect":true,"rationale":"Under the objective theory of contracts, the law looks at outward expressions rather than secret, unexpressed intentions.","text":"Yes, because the outward manifestations of Arthur's words and actions would lead a reasonable person to believe a serious offer was intended."},{"isCorrect":false,"rationale":"The setting of a transaction does not automatically invalidate an offer if the elements of intent, definiteness, and communication are met.","text":"No, because a contract for the sale of land cannot be initiated in a social setting like a restaurant."}],"hint":"Consider the 'objective theory of contracts' discussed in the Classic Case of Lucy v. Zehmer.","question":"An individual named Arthur is at a restaurant with a long-time acquaintance, Bill. After several drinks, Arthur tells Bill, \"I bet you wouldn't give me $\\$50,000$ for my property.\" Bill replies, \"I would.\" Arthur then writes a short agreement on the back of a menu stating he agrees to sell the property for that price and has his wife sign it as well. Arthur later claims he was just joking and 'high as a Georgia pine.' Was there a legally effective offer?"},{"answerOptions":[{"isCorrect":false,"rationale":"This ignores the exception for ads that are clear, definite, and explicit regarding the terms of performance.","text":"No, because advertisements are always considered invitations to make an offer under the common law."},{"isCorrect":false,"rationale":"General price listings are typically invitations to negotiate; specific conditions like 'first come first served' are required to elevate an ad to an offer.","text":"Yes, because any advertisement that lists a price is legally binding to the first person who sees it."},{"isCorrect":true,"rationale":"While most ads are invitations to negotiate, an ad that specifies a limited quantity and a specific method of acceptance is an offer.","text":"Yes, because the advertisement was clear, definite, and left nothing open for negotiation."},{"isCorrect":false,"rationale":"An offeror cannot impose new conditions after the offeree has already accepted the terms of a specific offer.","text":"No, because the store has the right to modify its 'house rules' to exclude certain customers after they arrive."}],"hint":"Think about the specific criteria used in the Lefkowitz case to distinguish an offer from an invitation to negotiate.","question":"A local department store publishes a newspaper advertisement stating, \"Saturday 9 AM Sharp, 3 Brand New Fur Coats, Worth to $\\$100.00$, First Come First Served, $\\$1.00$ Each.\" A customer arrives at 9 AM with $\\$1.00$ and is the first in line, but the store refuses to sell, claiming it was just an invitation to negotiate. Was there a legally effective offer?"},{"answerOptions":[{"isCorrect":false,"rationale":"Mere specificity does not create an offer if the context indicates to a reasonable person that the situation is hyperbolic or joking.","text":"Yes, because the commercial provided a specific number of points required to obtain the item."},{"isCorrect":false,"rationale":"While true that the catalog details were missing, the primary legal hurdle here is the lack of serious objective intent.","text":"No, because the commercial was a preliminary negotiation that required the consumer to look at the catalog first."},{"isCorrect":false,"rationale":"Performance only creates a contract if a valid offer was actually made to begin with.","text":"Yes, because the consumer performed the requested action of collecting the points."},{"isCorrect":true,"rationale":"Offers made in obvious jest do not meet the requirement of serious, objective intent.","text":"No, because the commercial was an obvious jest that a reasonable person would not take seriously."}],"hint":"Consider whether a reasonable observer would view a military jet as a realistic promotional prize in a soda commercial.","question":"A soft drink company airs a television commercial showing a teenager landing a military jet at a school. The commercial jokingly suggests that the jet can be acquired for 7 million promotional 'points.' A consumer manages to accumulate the points and demands the jet. The company's catalog, which contains the actual prize list, does not mention the jet. Was there a legally effective offer?"},{"answerOptions":[{"isCorrect":false,"rationale":"The mention of a price within an inquiry does not transform that inquiry into a binding commitment.","text":"Yes, because a specific price was mentioned and accepted."},{"isCorrect":false,"rationale":"This applies to acceptance; the issue here is that the initial statement was never an offer to begin with.","text":"No, because Bill's response was not a 'mirror image' of Rachael's statement."},{"isCorrect":false,"rationale":"The objective standard distinguishes between a serious intent to be bound and a simple request for information.","text":"Yes, because the objective standard suggests that anyone asking about a price wants to buy the item."},{"isCorrect":true,"rationale":"An invitation to negotiate or an inquiry about price does not constitute a legal offer.","text":"No, because Rachael's question was a preliminary negotiation or inquiry, not a manifestation of intent to be bound."}],"hint":"Focus on the difference between an invitation to negotiate and a definite promise to perform.","question":"Rachael asks Bill, \"Would you consider selling your car for $\\$5,000$?\" Bill responds, \"I might be interested in that price.\" Rachael immediately says, \"I accept!\" Was there a legally effective offer?"},{"answerOptions":[{"isCorrect":false,"rationale":"Specificity and communication are irrelevant if the fundamental requirement of objective intent is missing.","text":"Yes, because the terms were definite and the offer was communicated to a third party."},{"isCorrect":true,"rationale":"The law recognizes that statements made in obvious anger or undue excitement typically lack the objective intent to form a contract.","text":"No, because the statement was made under strong excitement or anger, which negates serious intent."},{"isCorrect":false,"rationale":"Courts generally do not weigh the adequacy of consideration; the primary issue here is the lack of intent.","text":"No, because a nickel is not 'legally sufficient' consideration for a car."},{"isCorrect":false,"rationale":"A 'reasonable person' would account for the owner's visible anger and realize the statement was hyperbolic, not a serious business proposal.","text":"Yes, because the bystander reasonably relied on the owner's literal words."}],"hint":"Look for how the law treats statements made in 'obvious anger' or 'undue excitement.'","question":"During a heated argument about a faulty car, the owner shouts, \"I'd sell this piece of junk for a nickel to the first person who walks by!\" A bystander hears this, pulls out a nickel, and says, \"I'll take it.\" Was there a legally effective offer?"},{"answerOptions":[{"isCorrect":true,"rationale":"Expressions of opinion do not indicate an intention to enter into a binding agreement.","text":"No, because the statement was an expression of opinion rather than a binding promise or commitment."},{"isCorrect":false,"rationale":"Reliance is part of other legal theories; for an offer to exist, there must be a manifestation of intent to be bound.","text":"Yes, because the patient relied on the specific timeframe mentioned by the doctor."},{"isCorrect":false,"rationale":"Many offers can be made orally; the issue here is the nature of the statement, not its form.","text":"No, because there was no written contract signed by both parties."},{"isCorrect":false,"rationale":"Even experts can express opinions without intending to create a contractual warranty or offer.","text":"Yes, because the doctor is an expert and his words carry legal weight as a guarantee."}],"hint":"Distinguish between a 'representation of fact' and a 'statement of belief' regarding future results.","question":"A patient is visiting a doctor for a hand injury. The doctor examines the hand and says, \"I believe your hand will be completely healed and back to normal within three to four days.\" The hand does not heal in that time. Was there a legally effective offer?"},{"answerOptions":[{"isCorrect":false,"rationale":"Selling a future interest is not illegal; the issue is simply that no offer was made yet.","text":"No, because the 'new lawnmower' had not yet arrived, making the contract illegal."},{"isCorrect":true,"rationale":"A statement of what one plans to do in the future is not a legal offer that can be accepted currently.","text":"No, because the statement was an expression of future intent, not a present commitment to be bound."},{"isCorrect":false,"rationale":"Acceptance cannot occur if there is no valid offer to accept; you cannot 'accept' a statement of future intent.","text":"Yes, because the neighbor's acceptance created a binding contract immediately."},{"isCorrect":false,"rationale":"Specificity in a statement of future intent does not turn it into a present offer.","text":"Yes, because the price and the subject matter were clearly identified."}],"hint":"Focus on whether the speaker promised to do something now or merely described a future plan.","question":"A homeowner tells his neighbor, \"I plan to sell my lawnmower for $\\$200$ next week once my new one arrives.\" The neighbor returns the next day with $\\$200$ and says, \"I accept your offer.\" Was there a legally effective offer?"},{"answerOptions":[{"isCorrect":true,"rationale":"An offer must be communicated to the specific offeree or their agent to be effective for that person.","text":"No, because the offer was not communicated to Bill, and only the offeree to whom the offer is directed can accept."},{"isCorrect":false,"rationale":"The law requires an offer to be directed and communicated to the specific party who seeks to accept it.","text":"Yes, because Sam's intent was to sell the car, regardless of who the buyer was."},{"isCorrect":false,"rationale":"Hearing an offer is not the same as being the intended recipient of that offer.","text":"Yes, because the offer was made out loud in a public space where anyone could hear it."},{"isCorrect":false,"rationale":"Bill's statement is actually a new offer, but the reason Sam's original offer isn't effective for Bill is lack of communication to him.","text":"No, because Bill's statement is considered a counteroffer under the objective theory."}],"hint":"Consider the 'Communication' element of a valid offer.","question":"Sam offers to sell his car to Helen for $\\$5,000$. Bill overhears the conversation and walks over to Sam, saying, \"I accept your offer to buy the car for $\\$5,000$.\" Was there a legally effective offer?"},{"answerOptions":[{"isCorrect":true,"rationale":"An offer must have definite terms; a promise to do something only if one 'wishes' to is an illusory promise.","text":"No, because the terms are not definite enough, as the seller has no actual duty to perform."},{"isCorrect":false,"rationale":"The Statute of Frauds relates to enforceability, but the first step is determining if an offer even existed, which fails here due to indefiniteness.","text":"No, because coal is a commodity that requires a written contract under the Statute of Frauds."},{"isCorrect":false,"rationale":"A requirements contract depends on the buyer's needs, not the seller's 'wish' to sell, which makes this promise illusory.","text":"Yes, because the power plant's acceptance creates a 'requirements contract.'"},{"isCorrect":false,"rationale":"While price is present, the quantity is completely indefinite and at the total whim of one party.","text":"Yes, because price and subject matter (coal) were clearly defined."}],"hint":"Think about the requirement of 'Definiteness' and whether a court could enforce this promise.","question":"A coal company promises to sell a power plant \"such coal as the coal company may wish to sell\" at a set price. The power plant agrees. Was there a legally effective offer?"},{"answerOptions":[{"isCorrect":false,"rationale":"This ignores the 'intent' element; obvious errors negate the objective intent required for an offer.","text":"Yes, because the terms were clear and definite, and the offer was communicated via the website."},{"isCorrect":false,"rationale":"Contract law allows for relief in cases of material, obvious unilateral mistakes where the other party should have known of the error.","text":"Yes, because the merchant is strictly liable for any price displayed to the public."},{"isCorrect":false,"rationale":"While usually true, the primary reason for invalidating this specific transaction is the obviousness of the clerical error.","text":"No, because online listings are always invitations to negotiate, regardless of the price listed."},{"isCorrect":true,"rationale":"Under the objective standard, if an offer is too good to be true, a reasonable person should know it is a mistake.","text":"No, because a reasonable person would recognize that the price was a 'simple mistake' and not a serious intent to sell."}],"hint":"Recall the 'reasonable person test' regarding obvious errors in pricing.","question":"An online electronics store lists a high-end laptop for $\\$1.50$ instead of $\\$1,500.00$ due to a clerical error in the website code. A customer quickly purchases five laptops at that price before the store notices. The store then cancels the order. Was there a legally effective offer?"}];
+        let currentIndex = 0;
+        let mode = 'quiz';
+        let state = quizData.map(() => ({ selectedIndex: null, hintVisible: false }));
+
+        function getStats() {
+            const answered = state.filter((s) => s.selectedIndex !== null).length;
+            const correct = state.filter((s, i) => s.selectedIndex !== null && quizData[i].answerOptions[s.selectedIndex].isCorrect).length;
+            const wrong = state.filter((s, i) => s.selectedIndex !== null && !quizData[i].answerOptions[s.selectedIndex].isCorrect).length;
+            const skipped = quizData.length - answered;
+            const accuracy = answered > 0 ? Math.round((correct / answered) * 100) : 0;
+            return { answered, correct, wrong, skipped, accuracy };
+        }
+
+        function shuffleAnswers() {
+            quizData.forEach((q) => {
+                for (let i = q.answerOptions.length - 1; i > 0; i -= 1) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [q.answerOptions[i], q.answerOptions[j]] = [q.answerOptions[j], q.answerOptions[i]];
+                }
+            });
+        }
+
+        function shuffleQuestions() {
+            for (let i = quizData.length - 1; i > 0; i -= 1) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [quizData[i], quizData[j]] = [quizData[j], quizData[i]];
+            }
+        }
+
+        function resetState() {
+            state = quizData.map(() => ({ selectedIndex: null, hintVisible: false }));
+        }
+
+        function renderQuestion() {
+            const q = quizData[currentIndex];
+            const s = state[currentIndex];
+            const content = document.getElementById('quiz-content');
+            const results = document.getElementById('results-content');
+            const hintBox = document.getElementById('hint-box');
+            const nav = document.querySelector('.navigation');
+            const nextBtn = document.getElementById('next-btn');
+            const prevBtn = document.getElementById('prev-btn');
+
+            let optionsHtml = '';
+            const correctIndex = q.answerOptions.findIndex((o) => o.isCorrect);
+            const selectedCorrect = s.selectedIndex !== null && q.answerOptions[s.selectedIndex].isCorrect;
+            q.answerOptions.forEach((opt, idx) => {
+                const isSelected = s.selectedIndex === idx;
+                const statusClass = isSelected ? (opt.isCorrect ? 'correct' : 'incorrect') : '';
+                const selectedClass = isSelected ? 'selected' : '';
+                const revealCorrect = (s.selectedIndex !== null && !selectedCorrect && opt.isCorrect) || (mode === 'review' && opt.isCorrect);
+                const revealClass = revealCorrect ? 'revealed-correct' : '';
+
+                optionsHtml += `
+                    <li class="option-item ${selectedClass} ${statusClass} ${revealClass}" onclick="selectOption(${idx})">
+                        <div class="option-label">
+                            <span>${String.fromCharCode(65 + idx)}. ${opt.text}</span>
+                        </div>
+                        <div class="feedback-state">
+                            ${opt.isCorrect ? '✓ Right answer' : '✕ Not quite'}
+                        </div>
+                        ${opt.rationale ? '<div class="rationale">' + opt.rationale + '</div>' : ''}
+                    </li>
+                `;
+            });
+
+            const stats = getStats();
+
+            content.innerHTML = `
+                <div class="progress-container">
+                    <div class="progress-text">${currentIndex + 1} / ${quizData.length}</div>
+                    <div class="status-bar">
+                        <div class="status-item status-correct">
+                            <span>✓</span>
+                            <span>${stats.correct}</span>
+                        </div>
+                        <div class="status-item status-wrong">
+                            <span>✕</span>
+                            <span>${stats.wrong}</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="question-text">${q.question}</div>
+                <ul class="options-list">
+                    ${optionsHtml}
+                </ul>
+            `;
+
+            // Update Hint Box
+            const hintText = document.getElementById('hint-text');
+            hintText.innerText = q.hint || 'No hint available for this question.';
+            if (s.hintVisible) {
+                hintBox.classList.add('active');
+            } else {
+                hintBox.classList.remove('active');
+            }
+
+            results.classList.add('hidden');
+            content.classList.remove('hidden');
+            hintBox.classList.remove('hidden');
+            nav.classList.remove('hidden');
+
+            prevBtn.disabled = currentIndex === 0;
+            nextBtn.disabled = false;
+            if (mode === 'review') {
+                nextBtn.innerText = currentIndex === quizData.length - 1 ? 'Back to Results' : 'Next';
+            } else {
+                nextBtn.innerText = currentIndex === quizData.length - 1 ? 'Finish' : 'Next';
+            }
+            document.getElementById('hint-icon-arrow').innerText = s.hintVisible ? '▲' : '▼';
+        }
+
+        function selectOption(idx) {
+            if (mode !== 'quiz') return;
+            if (state[currentIndex].selectedIndex !== null) return; // Prevent re-selection
+            state[currentIndex].selectedIndex = idx;
+            renderQuestion();
+        }
+
+        function toggleHint() {
+            if (mode === 'results') return;
+            state[currentIndex].hintVisible = !state[currentIndex].hintVisible;
+            renderQuestion();
+        }
+
+        function renderResults() {
+            const stats = getStats();
+            const content = document.getElementById('quiz-content');
+            const results = document.getElementById('results-content');
+            const hintBox = document.getElementById('hint-box');
+            const nav = document.querySelector('.navigation');
+
+            const score = `${stats.correct} / ${quizData.length}`;
+
+            results.innerHTML = `
+                <div class="results-screen">
+                    <div>
+                        <h1 class="results-title">You did it! Quiz Complete.</h1>
+                        <p class="results-subtitle">Review your score or take another run.</p>
+                    </div>
+                    <div class="results-grid">
+                        <div class="result-card">
+                            <div class="result-label">Score</div>
+                            <div class="result-value">${score}</div>
+                        </div>
+                        <div class="result-card">
+                            <div class="result-label">Accuracy</div>
+                            <div class="result-value">${stats.accuracy}%</div>
+                        </div>
+                        <div class="result-card">
+                            <div class="result-metrics">
+                                <div>Right <strong>${stats.correct}</strong></div>
+                                <div>Wrong <strong>${stats.wrong}</strong></div>
+                                <div>Skipped <strong>${stats.skipped}</strong></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="results-actions">
+                        <button id="review-btn" class="btn btn-ghost">Review Quiz</button>
+                        <button id="retake-btn" class="btn btn-next">Retake Quiz</button>
+                    </div>
+                </div>
+            `;
+
+            content.classList.add('hidden');
+            results.classList.remove('hidden');
+            hintBox.classList.add('hidden');
+            nav.classList.add('hidden');
+
+            document.getElementById('review-btn').onclick = () => {
+                mode = 'review';
+                currentIndex = 0;
+                renderQuestion();
+            };
+
+            document.getElementById('retake-btn').onclick = () => {
+                mode = 'quiz';
+                currentIndex = 0;
+                shuffleQuestions();
+                shuffleAnswers();
+                resetState();
+                renderQuestion();
+            };
+        }
+
+        document.getElementById('prev-btn').onclick = () => {
+            if (mode === 'results') return;
+            if (currentIndex > 0) {
+                currentIndex--;
+                renderQuestion();
+            }
+        };
+
+        document.getElementById('next-btn').onclick = () => {
+            if (mode === 'results') return;
+            if (mode === 'review') {
+                if (currentIndex < quizData.length - 1) {
+                    currentIndex++;
+                    renderQuestion();
+                } else {
+                    mode = 'results';
+                    renderResults();
+                }
+                return;
+            }
+            if (currentIndex < quizData.length - 1) {
+                currentIndex++;
+                renderQuestion();
+            } else {
+                mode = 'results';
+                renderResults();
+            }
+        };
+
+        document.getElementById('hint-toggle').onclick = toggleHint;
+
+        renderQuestion();
+    </script>
+</body>
+</html>
