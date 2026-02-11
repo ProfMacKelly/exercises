@@ -1,50 +1,38 @@
-<!DOCTYPE html>
-<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>You Have the Right to Remain Innocent - NotebookLM - Quiz Export</title>
+    <title>Contract Law Quiz - Deep Blue Edition</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@600;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap');
 
         :root {
-            --bg: #f6f1e7;
-            --bg-deep: #efe4d6;
-            --ink: #171717;
-            --muted: #5b5b5b;
-            --accent: #d3542c;
-            --accent-light: #ff8f5a;
-            --accent-dark: #b14320;
-            --teal: #1f6f78;
-            --card: #fff7ef;
-            --stroke: #e3d6c5;
-            --shadow: 0 18px 40px rgba(23, 23, 23, 0.12);
+            /* Custom Deep Blue Theme */
+            --bg: #0B4779; /* Lighter top gradient */
+            --bg-deep: #02376B; /* Your requested deep blue */
+            --ink: #ffffff; /* White text for dark BG */
+            --muted: #cbd5e0;
+            --accent: #461901; /* Warm gold/orange for contrast */
+            --accent-light: #ffbd7f;
+            --accent-dark: #e67e22;
+            --teal: #4cd137; 
+            --card: #f5deb3; /* Keep cards white for readability */
+            --card-text: #0C0A09; /* Text inside the white cards */
+            --stroke: #2d3436;
+            --shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
             --radius-sm: 10px;
             --radius-md: 12px;
             --radius-lg: 14px;
             --radius-xl: 18px;
             --radius-2xl: 22px;
-            --space-1: 6px;
-            --space-2: 8px;
-            --space-3: 10px;
-            --space-4: 12px;
-            --space-5: 14px;
-            --space-6: 16px;
-            --space-7: 18px;
-            --space-8: 20px;
-            --space-9: 24px;
-            --space-10: 32px;
             --font-display: 'Space Grotesk', sans-serif;
             --font-body: 'IBM Plex Sans', sans-serif;
-            --error: #b54832;
+            --error: #ff7675;
         }
 
         body {
             font-family: var(--font-body);
-            background:
-                radial-gradient(240px 140px at 10% -10%, #ffd2b9 0%, transparent 70%),
-                radial-gradient(220px 160px at 90% 0%, #cfe7e6 0%, transparent 65%),
-                linear-gradient(180deg, var(--bg) 0%, var(--bg-deep) 100%);
+            /* Rich gradient using your requested #0B4779 */
+            background: radial-gradient(circle at top left, var(--bg), var(--bg-deep) 70%);
             color: var(--ink);
             margin: 0;
             display: flex;
@@ -56,11 +44,11 @@
         .quiz-container {
             width: 100%;
             max-width: 800px;
-            padding: var(--space-10) var(--space-8);
+            padding: 32px 24px;
             box-sizing: border-box;
             background: var(--card);
+            color: var(--card-text); /* Ensure questions/options are dark on white */
             border-radius: var(--radius-2xl);
-            border: 1px solid var(--stroke);
             box-shadow: var(--shadow);
         }
 
@@ -71,33 +59,18 @@
             margin-bottom: 24px;
         }
 
-        .progress-text {
-            color: var(--muted);
-            font-size: 0.9em;
-        }
-
-        .status-bar {
-            display: flex;
-            gap: 16px;
-            font-size: 0.9em;
-            font-weight: 500;
-        }
-
-        .status-item {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-
-        .status-correct { color: var(--teal); }
-        .status-wrong { color: var(--error); }
+        .progress-text { color: #718096; font-size: 0.9em; font-weight: 600; }
+        .status-bar { display: flex; gap: 16px; font-size: 0.9em; font-weight: 500; }
+        .status-correct { color: #2e7d32; }
+        .status-wrong { color: #d32f2f; }
 
         .question-text {
             font-family: var(--font-display);
             font-size: 1.5em;
-            font-weight: 600;
+            font-weight: 700;
             margin-bottom: 32px;
-            line-height: 1.4;
+            line-height: 1.3;
+            color: #000000;
         }
 
         .options-list {
@@ -109,119 +82,53 @@
         }
 
         .option-item {
-            background-color: #fff;
-            border: 1px solid var(--stroke);
-            padding: var(--space-4) var(--space-6);
+            background-color: #f8fafc;
+            border: 2px solid #461901;
+            padding: 16px;
             border-radius: var(--radius-lg);
             cursor: pointer;
-            transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
+            transition: all 0.2s ease;
         }
 
         .option-item:hover:not(.selected) {
-            background-color: var(--card);
-            transform: translateY(-1px);
-            box-shadow: 0 10px 18px rgba(23, 23, 23, 0.12);
+            background-color: #f1f5f9;
+            border-color: #432004;
+            transform: translateX(5px);
         }
 
         .option-item.selected.correct {
-            background-color: rgba(31, 111, 120, 0.12);
-            border-color: var(--teal);
+            background-color: #f0fff4;
+            border-color: #48bb78;
         }
 
         .option-item.selected.incorrect {
-            background-color: rgba(181, 72, 50, 0.12);
-            border-color: var(--error);
+            background-color: #fff5f5;
+            border-color: #f56565;
         }
 
         .option-item.revealed-correct {
-            border-color: rgba(31, 111, 120, 0.5);
-            box-shadow: inset 0 0 0 1px rgba(31, 111, 120, 0.16);
+            border-color: #48bb78;
+            background-color: #f0fff4;
         }
 
-        .option-label {
-            font-weight: 500;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
+        .feedback-state { font-weight: bold; font-size: 0.9em; display: none; margin-top: 4px; }
+        .selected .feedback-state, .revealed-correct .feedback-state { display: block; }
+        .correct .feedback-state, .revealed-correct .feedback-state { color: #2f855a; }
+        .incorrect .feedback-state { color: #c53030; }
 
-        .feedback-state {
-            font-weight: bold;
-            font-size: 0.9em;
-            display: none;
-        }
-
-        .selected .feedback-state {
-            display: block;
-        }
-
-        .revealed-correct .feedback-state {
-            display: block;
-        }
-
-        .correct .feedback-state { color: var(--teal); }
-        .incorrect .feedback-state { color: var(--error); }
-        .revealed-correct .feedback-state { color: var(--teal); }
-
-        .rationale {
-            font-size: 0.95em;
-            color: var(--muted);
-            margin-top: 4px;
-            line-height: 1.5;
-            display: none;
-        }
-
-        .selected .rationale {
-            display: block;
-        }
-
-        .revealed-correct .rationale {
-            display: block;
-        }
-        .hint-toggle {
-            border: 1px solid var(--stroke);
-            color: var(--muted);
-            cursor: pointer;
-            padding: var(--space-2) var(--space-6);
-            border-radius: var(--radius-md);
-            background-color: #fff;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 0.9em;
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
-        }
-
-        .hint-toggle:hover {
-            transform: translateY(-1px);
-            box-shadow: 0 10px 18px rgba(23, 23, 23, 0.12);
-        }
+        .rationale { font-size: 0.95em; color: #4a5568; margin-top: 6px; display: none; }
+        .selected .rationale, .revealed-correct .rationale { display: block; }
 
         .hint-content {
-            margin-top: 32px;
-            padding: var(--space-6);
-            background-color: #fff;
-            border: 1px solid var(--stroke);
-            border-radius: var(--radius-lg);
-            font-size: 0.95em;
-            color: var(--muted);
+            margin-top: 24px;
+            padding: 16px;
+            background-color: #fffaf0;
+            border-left: 4px solid var(--accent);
+            border-radius: var(--radius-md);
             display: none;
-            align-items: flex-start;
-            gap: 16px;
+            color: #0C0A09;
         }
-
-        .hint-content.active {
-            display: flex;
-        }
-
-        .hint-icon-box {
-            color: var(--accent-dark);
-            font-size: 1.2em;
-            margin-top: -2px;
-        }
+        .hint-content.active { display: block; }
 
         .navigation {
             margin-top: 32px;
@@ -230,191 +137,31 @@
             align-items: center;
         }
 
-        .nav-buttons {
-            display: flex;
-            gap: 12px;
-        }
-
         .btn {
             border-radius: var(--radius-md);
-            padding: var(--space-2) var(--space-7);
+            padding: 12px 24px;
             font-size: 0.95em;
-            font-weight: 500;
+            font-weight: 600;
             cursor: pointer;
-            border: 1px solid transparent;
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            border: none;
+            transition: all 0.2s ease;
         }
 
-        .btn-prev {
-            background-color: #fff;
-            color: var(--ink);
-            border-color: var(--stroke);
-        }
-
-        .btn-prev:hover:not(:disabled) {
-            transform: translateY(-1px);
-            box-shadow: 0 10px 18px rgba(23, 23, 23, 0.12);
-        }
-
-        .btn-next {
-            background: linear-gradient(90deg, var(--accent), var(--accent-light));
-            color: #fff;
-        }
-
-        .btn-next:hover:not(:disabled) {
-            transform: translateY(-1px);
-            box-shadow: 0 10px 18px rgba(23, 23, 23, 0.12);
-        }
-
-        .btn:disabled {
-            opacity: 0.3;
-            cursor: not-allowed;
-        }
-
-        .results-screen {
-            display: flex;
-            flex-direction: column;
-            gap: var(--space-8);
-        }
-
-        .results-title {
-            font-family: var(--font-display);
-            font-size: 2.1em;
-            margin: 0;
-        }
-
-        .results-subtitle {
-            color: var(--muted);
-            margin: 0;
-            font-size: 1em;
-        }
-
-        .results-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: var(--space-6);
-        }
-
-        .result-card {
-            padding: var(--space-6);
-            border-radius: var(--radius-xl);
-            background: #fff;
-            border: 1px solid var(--stroke);
-            display: flex;
-            flex-direction: column;
-            gap: var(--space-3);
-        }
-
-        .result-label {
-            color: var(--muted);
-            font-size: 0.95em;
-        }
-
-        .result-value {
-            font-size: 2em;
-            font-family: var(--font-display);
-        }
-
-        .result-metrics {
-            display: flex;
-            flex-direction: column;
-            gap: var(--space-2);
-            color: var(--muted);
-            font-size: 0.95em;
-        }
-
-        .results-actions {
-            display: flex;
-            gap: var(--space-4);
-            flex-wrap: wrap;
-        }
-
-        .btn-ghost {
-            background-color: transparent;
-            border: 1px solid var(--stroke);
-            color: var(--ink);
-        }
+        .btn-prev { background-color: #edf2f7; color: #4a5568; }
+        .btn-next { background: var(--bg-deep); color: #fff; }
+        .btn-next:hover { opacity: 0.9; transform: translateY(-2px); }
 
         .hidden { display: none; }
-
-        @media (max-width: 900px) {
-            .quiz-container {
-                margin: var(--space-8);
-                max-width: 100%;
-            }
-        }
-
-        @media (max-width: 720px) {
-            .quiz-container {
-                padding: var(--space-8) var(--space-6);
-            }
-
-            .question-text {
-                font-size: 1.3em;
-            }
-
-            .option-item {
-                padding: var(--space-4);
-            }
-        }
-
-        @media (max-width: 520px) {
-            body {
-                align-items: flex-start;
-            }
-
-            .quiz-container {
-                margin: var(--space-6);
-                padding: var(--space-7) var(--space-5);
-            }
-
-            .progress-container {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: var(--space-3);
-            }
-
-            .navigation {
-                flex-direction: column;
-                align-items: stretch;
-                gap: var(--space-4);
-            }
-
-            .nav-buttons {
-                width: 100%;
-            }
-
-            .btn {
-                width: 100%;
-            }
-
-            .hint-toggle {
-                justify-content: space-between;
-            }
-
-            .results-actions {
-                flex-direction: column;
-            }
-        }
     </style>
 </head>
 <body>
     <div class="quiz-container">
-        <div id="quiz-content">
-            <!-- Dynamic Content -->
-        </div>
+        <div id="quiz-content"></div>
         <div id="results-content" class="hidden"></div>
-
-        <div id="hint-box" class="hint-content">
-            <div class="hint-icon-box">💡</div>
-            <div id="hint-text"></div>
-        </div>
+        <div id="hint-box" class="hint-content"></div>
 
         <div class="navigation">
-            <button id="hint-toggle" class="hint-toggle">
-                <span>Hint</span>
-                <span id="hint-icon-arrow">▼</span>
-            </button>
+            <button id="hint-toggle" class="btn btn-prev">💡 Hint</button>
             <div class="nav-buttons">
                 <button id="prev-btn" class="btn btn-prev">Previous</button>
                 <button id="next-btn" class="btn btn-next">Next</button>
@@ -423,224 +170,116 @@
     </div>
 
     <script>
-        const quizData = [{"answerOptions":[{"isCorrect":false,"rationale":"While having an attorney is a right, it is not a legal violation for a citizen to choose to speak to the police voluntarily.","text":"It is a violation of federal law to speak to an officer without a licensed attorney present."},{"isCorrect":false,"rationale":"A statement does not inherently grant legal authority for a search; the danger lies in how the information provided can be used as evidence later.","text":"Innocent statements automatically trigger an immediate search of the individual's property."},{"isCorrect":false,"rationale":"On the contrary, police officers frequently testify about any statements made during an encounter, which is why the author cautions against speaking.","text":"Police officers are legally prohibited from testifying about statements made by innocent people."},{"isCorrect":true,"rationale":"The text explains that the nuances of police questioning can lead to misunderstandings that severely disadvantage a suspect, regardless of their actual innocence.","text":"Statements can be misinterpreted or manipulated to suggest guilt during a trial."}],"hint":"Consider how the legal process handles information provided by a suspect during an investigation.","question":"According to the source material, why is it considered dangerous for even innocent individuals to speak with the police?"},{"answerOptions":[{"isCorrect":false,"rationale":"The text discusses how interpretations are shifting, but it does not claim there is a universal requirement for judges to instruct juries in this specific way.","text":"Judges are required to tell juries that silence is an admission of guilt."},{"isCorrect":true,"rationale":"The author notes that those most knowledgeable about the system, such as police, advise their families differently than what the general public is led to believe.","text":"Law enforcement professionals often teach their own children not to speak to the police."},{"isCorrect":false,"rationale":"The author, a law professor, and many others in the legal field emphasize the importance of these rights for all citizens.","text":"Public defenders are the only legal professionals who believe in the right to remain silent."},{"isCorrect":false,"rationale":"Constitutional protections apply during interactions with law enforcement, even before formal charges are filed.","text":"The Bill of Rights only applies to individuals who have already been formally charged with a crime."}],"hint":"Think about what those who work within the justice system tell their loved ones.","question":"What does the author identify as a significant 'discrepancy' in the advice given regarding police interactions?"},{"answerOptions":[{"isCorrect":false,"rationale":"The text focuses on the suspect's reliance on common sense rather than the officer's application of it.","text":"The belief that police officers always use common sense when evaluating a suspect's behavior."},{"isCorrect":false,"rationale":"The text does not address the intelligence of those committing crimes, but rather the vulnerability of everyone under complex statutes.","text":"The theory that most crimes are committed by people who lack basic logical reasoning skills."},{"isCorrect":true,"rationale":"The author argues that because average Americans might unknowingly commit several felonies daily, relying on simple intuition during a police encounter is risky.","text":"The assumption that one's instincts are sufficient to navigate increasingly complex and contradictory laws."},{"isCorrect":false,"rationale":"While a common hope, the text highlights how structural flaws and human error can obscure the truth regardless of the suspect's intent.","text":"The idea that the truth will always be obvious to a jury if a suspect simply tells their story."}],"hint":"Reflect on the difficulty of knowing whether a simple daily action might actually be illegal.","question":"In the context of modern legal landscapes, what is the 'Fallacy of Common Sense' described in Chapter 1?"},{"answerOptions":[{"isCorrect":false,"rationale":"While coercion is mentioned, confirmation bias specifically refers to the cognitive error made by the person conducting the investigation.","text":"It forces suspects to agree with whatever the officer says to avoid physical confrontation."},{"isCorrect":false,"rationale":"Confirmation bias is an unintentional psychological phenomenon, not a legal requirement for the prosecution.","text":"It requires the prosecution to prove that the suspect intended to lie to the investigators."},{"isCorrect":false,"rationale":"The defense is allowed to present evidence; confirmation bias is a factor that occurs earlier during the investigative phase.","text":"It prevents the defense from presenting any evidence that contradicts the police report."},{"isCorrect":true,"rationale":"As human beings, police officers may subconsciously look for details that confirm their suspicions, leading to errors in judgment.","text":"It can lead officers to misinterpret innocent behavior as evidence that supports a preconceived theory of guilt."}],"hint":"Think about how an investigator's initial assumptions might cloud their perception of new information.","question":"How does confirmation bias contribute to the risk of wrongful convictions during interrogations?"},{"answerOptions":[{"isCorrect":false,"rationale":"The text notes a 'misconception' that only the guilty use it, but legally, the right still applies to everyone, though its protection is eroding.","text":"Innocent parties are no longer allowed to invoke the Fifth Amendment; it is reserved only for the guilty."},{"isCorrect":false,"rationale":"While the author suggests silence must be invoked verbally, the law does not require a detailed written justification for exercising the right.","text":"The Supreme Court now requires suspects to provide a written explanation for why they are remaining silent."},{"isCorrect":false,"rationale":"The amendment remains part of the Constitution; its application and interpretation have changed, but it has not been repealed.","text":"The Fifth Amendment has been officially repealed for cases involving non-violent felonies."},{"isCorrect":true,"rationale":"Recent judicial interpretations, such as in *Salinas v. Texas*, have shifted the view of silence from a protected right to potentially detrimental evidence.","text":"Silence is now more likely to be used by prosecutors as evidence of a suspect's guilt."}],"hint":"Look for a shift in how a suspect's refusal to speak is interpreted in a courtroom.","question":"According to the summary of Chapter 2, how has the legal perception of the Fifth Amendment changed due to recent conservative rulings?"},{"answerOptions":[{"isCorrect":false,"rationale":"The source explicitly warns that lying to the police is a dangerous gamble that can result in separate criminal charges.","text":"Lye about minor details if it helps redirect the officer's attention away from you."},{"isCorrect":false,"rationale":"The text warns that even 'innocent' explanations can be misinterpreted or twisted, advising against providing such details.","text":"Politely provide a detailed alibi to clear up any immediate misunderstandings."},{"isCorrect":true,"rationale":"The author stresses that merely staying quiet is no longer sufficient; one must clearly state they are exercising their constitutional rights.","text":"Verbally and explicitly invoke the right to remain silent and the right to an attorney."},{"isCorrect":false,"rationale":"Negotiations are generally handled by attorneys and prosecutors; speaking to the police to 'make a deal' is a form of talking that the author discourages.","text":"Attempt to negotiate a deal with the officer before any formal questioning begins."}],"hint":"Consider the difference between passive silence and active legal assertion.","question":"What specific action does James Duane recommend an individual take when interacting with the police to protect their rights?"},{"answerOptions":[{"isCorrect":false,"rationale":"While famous for establishing the 'right to remain silent' warning, it is the more recent rulings that have created the 'harmful' interpretations discussed in the text.","text":"*Miranda v. Arizona*"},{"isCorrect":false,"rationale":"This case primarily established the right to counsel for indigent defendants, not the specific rules regarding pre-Miranda silence.","text":"*Gideon v. Wainwright*"},{"isCorrect":true,"rationale":"This case is specifically mentioned as a turning point where the court allowed a defendant's silence to be used against them because they had not explicitly invoked their rights.","text":"*Salinas v. Texas*"},{"isCorrect":false,"rationale":"This case dealt with privacy and reproductive rights, which is unrelated to the Fifth Amendment interrogation issues discussed by Duane.","text":"*Roe v. Wade*"}],"hint":"Recall the 2013 case that changed the requirements for protecting one's silence.","question":"Which Supreme Court case is cited as a reason why silence can now be potentially harmful during an interrogation?"},{"answerOptions":[{"isCorrect":false,"rationale":"All amendments are subject to judicial interpretation; the text emphasizes its effectiveness as a strategy rather than its immunity to change.","text":"The Sixth Amendment is the only part of the Bill of Rights that has not been reinterpreted by the court."},{"isCorrect":true,"rationale":"Invoking the Sixth Amendment (Right to Counsel) changes the legal dynamic of an encounter and puts a stop to direct questioning.","text":"It asserts the right to counsel, which provides a more robust shield against interrogation."},{"isCorrect":false,"rationale":"The Sixth Amendment deals with the right to legal assistance, not the suppression of physical evidence (which usually falls under the Fourth Amendment).","text":"Pleading the Sixth prevents the police from being able to use any physical evidence found at the scene."},{"isCorrect":false,"rationale":"No amendment grants 'immunity' for past crimes simply by asking for a lawyer.","text":"It grants the suspect immunity from any crimes committed before the attorney arrives."}],"hint":"Think about what specific legal protection is granted by the Sixth Amendment compared to the Fifth.","question":"According to the text, why is 'Pleading the Sixth' often a more effective strategy than just remaining silent?"},{"answerOptions":[{"isCorrect":false,"rationale":"While this happens, the specific theme discussed in the summaries involves statements made directly to police during questioning.","text":"Plea bargaining where innocent people take a deal to avoid a longer sentence."},{"isCorrect":true,"rationale":"The text highlights case studies where individuals were pressured or worn down by lengthy questioning until they made self-incriminating statements.","text":"False confessions due to exhaustion or coercion during long interrogations."},{"isCorrect":false,"rationale":"The provided text emphasizes the flaws in the system and the pressure of interrogations over personal motivations like protecting others.","text":"The 'Martyr Syndrome' where individuals confess to protect their family members."},{"isCorrect":false,"rationale":"The author focuses on external factors like police tactics and exhaustion rather than internal psychological complexes.","text":"The 'Guilt Complex' where innocent people feel responsible for societal problems."}],"hint":"Consider the physical and mental state of a suspect after many hours in a small room with investigators.","question":"What recurring theme in the book describes innocent people admitting to crimes they did not commit?"},{"answerOptions":[{"isCorrect":false,"rationale":"There is no such law; cooperation is encouraged by law enforcement, which is exactly why the author warns against it.","text":"The police are required by law to arrest anyone who offers to help with a case."},{"isCorrect":true,"rationale":"Even well-intentioned cooperation can provide details that a prosecutor can later frame as suspicious or inconsistent.","text":"Misunderstandings or misinterpretations of cooperative statements can be used against the suspect in court."},{"isCorrect":false,"rationale":"Assisting the police is generally legal; the author's point is that it is strategically unwise, not that it is a crime.","text":"It is a felony to assist an officer in an investigation without a court order."},{"isCorrect":false,"rationale":"The right to a trial is a separate legal protection that is not lost simply by speaking to the police.","text":"Cooperating with the police automatically waives the right to a jury trial."}],"hint":"Focus on how the prosecution might use 'helpful' information at a later date.","question":"Why does the author argue that 'cooperation' with the police is a dangerous gamble?"}];
+        const quizData = [
+            {
+                "question": "Which defense applies when a contract's primary purpose is rendered valueless by an unforeseen event, even if performance is still possible?",
+                "hint": "Think about a situation where you can still do the work, but the reason for the work no longer exists.",
+                "answerOptions": [
+                    { "text": "Frustration of Purpose", "isCorrect": true, "rationale": "This defense occurs when an unforeseen event undermines a party's principal purpose for entering the contract." },
+                    { "text": "Commercial Impracticability", "isCorrect": false, "rationale": "This applies when performance becomes excessively difficult or expensive, not necessarily valueless." },
+                    { "text": "Mutual Mistake", "isCorrect": false, "rationale": "This involves a mistake about a fact at the time the contract was made, not a later event." }
+                ]
+            },
+            {
+                "question": "A minor (under 18) enters into a contract for a non-essential luxury item. Why is this contract likely unenforceable?",
+                "hint": "This relates to the legal standing or power of the person signing.",
+                "answerOptions": [
+                    { "text": "Lack of Consideration", "isCorrect": false, "rationale": "There is usually consideration (money for item); the issue is the person's age." },
+                    { "text": "Lack of Capacity", "isCorrect": true, "rationale": "Minors generally lack the legal capacity to enter into binding contracts, making them voidable at the minor's option." },
+                    { "text": "Undue Influence", "isCorrect": false, "rationale": "This requires proof of a special relationship and unfair persuasion." }
+                ]
+            },
+            {
+                "question": "Under the Statute of Frauds, which of the following contracts MUST be in writing to be enforceable?",
+                "hint": "Look for the option involving a significant time commitment or high value.",
+                "answerOptions": [
+                    { "text": "A service contract for 6 months.", "isCorrect": false, "rationale": "Only contracts that *cannot* be performed within one year fall under this rule." },
+                    { "text": "A contract for the sale of goods over $500.", "isCorrect": true, "rationale": "Under the UCC, contracts for the sale of goods for $500 or more must generally be in writing." },
+                    { "text": "A contract for a $200 monthly gym membership.", "isCorrect": false, "rationale": "This does not typically require a writing unless it's for a term longer than one year." }
+                ]
+            }
+        ];
+
         let currentIndex = 0;
-        let mode = 'quiz';
         let state = quizData.map(() => ({ selectedIndex: null, hintVisible: false }));
 
         function getStats() {
-            const answered = state.filter((s) => s.selectedIndex !== null).length;
+            const answered = state.filter(s => s.selectedIndex !== null).length;
             const correct = state.filter((s, i) => s.selectedIndex !== null && quizData[i].answerOptions[s.selectedIndex].isCorrect).length;
-            const wrong = state.filter((s, i) => s.selectedIndex !== null && !quizData[i].answerOptions[s.selectedIndex].isCorrect).length;
-            const skipped = quizData.length - answered;
-            const accuracy = answered > 0 ? Math.round((correct / answered) * 100) : 0;
-            return { answered, correct, wrong, skipped, accuracy };
-        }
-
-        function shuffleAnswers() {
-            quizData.forEach((q) => {
-                for (let i = q.answerOptions.length - 1; i > 0; i -= 1) {
-                    const j = Math.floor(Math.random() * (i + 1));
-                    [q.answerOptions[i], q.answerOptions[j]] = [q.answerOptions[j], q.answerOptions[i]];
-                }
-            });
-        }
-
-        function shuffleQuestions() {
-            for (let i = quizData.length - 1; i > 0; i -= 1) {
-                const j = Math.floor(Math.random() * (i + 1));
-                [quizData[i], quizData[j]] = [quizData[j], quizData[i]];
-            }
-        }
-
-        function resetState() {
-            state = quizData.map(() => ({ selectedIndex: null, hintVisible: false }));
+            return { answered, correct, total: quizData.length };
         }
 
         function renderQuestion() {
             const q = quizData[currentIndex];
             const s = state[currentIndex];
             const content = document.getElementById('quiz-content');
-            const results = document.getElementById('results-content');
-            const hintBox = document.getElementById('hint-box');
-            const nav = document.querySelector('.navigation');
-            const nextBtn = document.getElementById('next-btn');
-            const prevBtn = document.getElementById('prev-btn');
+            const stats = getStats();
 
-            let optionsHtml = '';
-            const correctIndex = q.answerOptions.findIndex((o) => o.isCorrect);
-            const selectedCorrect = s.selectedIndex !== null && q.answerOptions[s.selectedIndex].isCorrect;
-            q.answerOptions.forEach((opt, idx) => {
+            let optionsHtml = q.answerOptions.map((opt, idx) => {
                 const isSelected = s.selectedIndex === idx;
                 const statusClass = isSelected ? (opt.isCorrect ? 'correct' : 'incorrect') : '';
-                const selectedClass = isSelected ? 'selected' : '';
-                const revealCorrect = (s.selectedIndex !== null && !selectedCorrect && opt.isCorrect) || (mode === 'review' && opt.isCorrect);
-                const revealClass = revealCorrect ? 'revealed-correct' : '';
-
-                optionsHtml += `
-                    <li class="option-item ${selectedClass} ${statusClass} ${revealClass}" onclick="selectOption(${idx})">
-                        <div class="option-label">
-                            <span>${String.fromCharCode(65 + idx)}. ${opt.text}</span>
-                        </div>
-                        <div class="feedback-state">
-                            ${opt.isCorrect ? '✓ Right answer' : '✕ Not quite'}
-                        </div>
-                        ${opt.rationale ? '<div class="rationale">' + opt.rationale + '</div>' : ''}
-                    </li>
-                `;
-            });
-
-            const stats = getStats();
+                const revealClass = (s.selectedIndex !== null && opt.isCorrect) ? 'revealed-correct' : '';
+                return `
+                    <li class="option-item ${isSelected ? 'selected' : ''} ${statusClass} ${revealClass}" onclick="selectOption(${idx})">
+                        <strong>${String.fromCharCode(65 + idx)}.</strong> ${opt.text}
+                        <div class="feedback-state">${opt.isCorrect ? '✓ Correct' : '✕ Incorrect'}</div>
+                        <div class="rationale">${opt.rationale}</div>
+                    </li>`;
+            }).join('');
 
             content.innerHTML = `
                 <div class="progress-container">
-                    <div class="progress-text">${currentIndex + 1} / ${quizData.length}</div>
+                    <div class="progress-text">QUESTION ${currentIndex + 1} OF ${quizData.length}</div>
                     <div class="status-bar">
-                        <div class="status-item status-correct">
-                            <span>✓</span>
-                            <span>${stats.correct}</span>
-                        </div>
-                        <div class="status-item status-wrong">
-                            <span>✕</span>
-                            <span>${stats.wrong}</span>
-                        </div>
+                        <span class="status-correct">✓ ${stats.correct}</span>
                     </div>
                 </div>
                 <div class="question-text">${q.question}</div>
-                <ul class="options-list">
-                    ${optionsHtml}
-                </ul>
+                <ul class="options-list">${optionsHtml}</ul>
             `;
 
-            // Update Hint Box
-            const hintText = document.getElementById('hint-text');
-            hintText.innerText = q.hint || 'No hint available for this question.';
-            if (s.hintVisible) {
-                hintBox.classList.add('active');
-            } else {
-                hintBox.classList.remove('active');
-            }
-
-            results.classList.add('hidden');
-            content.classList.remove('hidden');
-            hintBox.classList.remove('hidden');
-            nav.classList.remove('hidden');
-
-            prevBtn.disabled = currentIndex === 0;
-            nextBtn.disabled = false;
-            if (mode === 'review') {
-                nextBtn.innerText = currentIndex === quizData.length - 1 ? 'Back to Results' : 'Next';
-            } else {
-                nextBtn.innerText = currentIndex === quizData.length - 1 ? 'Finish' : 'Next';
-            }
-            document.getElementById('hint-icon-arrow').innerText = s.hintVisible ? '▲' : '▼';
-        }
-
-        function selectOption(idx) {
-            if (mode !== 'quiz') return;
-            if (state[currentIndex].selectedIndex !== null) return; // Prevent re-selection
-            state[currentIndex].selectedIndex = idx;
-            renderQuestion();
-        }
-
-        function toggleHint() {
-            if (mode === 'results') return;
-            state[currentIndex].hintVisible = !state[currentIndex].hintVisible;
-            renderQuestion();
-        }
-
-        function renderResults() {
-            const stats = getStats();
-            const content = document.getElementById('quiz-content');
-            const results = document.getElementById('results-content');
             const hintBox = document.getElementById('hint-box');
-            const nav = document.querySelector('.navigation');
-
-            const score = `${stats.correct} / ${quizData.length}`;
-
-            results.innerHTML = `
-                <div class="results-screen">
-                    <div>
-                        <h1 class="results-title">You did it! Quiz Complete.</h1>
-                        <p class="results-subtitle">Review your score or take another run.</p>
-                    </div>
-                    <div class="results-grid">
-                        <div class="result-card">
-                            <div class="result-label">Score</div>
-                            <div class="result-value">${score}</div>
-                        </div>
-                        <div class="result-card">
-                            <div class="result-label">Accuracy</div>
-                            <div class="result-value">${stats.accuracy}%</div>
-                        </div>
-                        <div class="result-card">
-                            <div class="result-metrics">
-                                <div>Right <strong>${stats.correct}</strong></div>
-                                <div>Wrong <strong>${stats.wrong}</strong></div>
-                                <div>Skipped <strong>${stats.skipped}</strong></div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="results-actions">
-                        <button id="review-btn" class="btn btn-ghost">Review Quiz</button>
-                        <button id="retake-btn" class="btn btn-next">Retake Quiz</button>
-                    </div>
-                </div>
-            `;
-
-            content.classList.add('hidden');
-            results.classList.remove('hidden');
-            hintBox.classList.add('hidden');
-            nav.classList.add('hidden');
-
-            document.getElementById('review-btn').onclick = () => {
-                mode = 'review';
-                currentIndex = 0;
-                renderQuestion();
-            };
-
-            document.getElementById('retake-btn').onclick = () => {
-                mode = 'quiz';
-                currentIndex = 0;
-                shuffleQuestions();
-                shuffleAnswers();
-                resetState();
-                renderQuestion();
-            };
+            hintBox.innerText = q.hint;
+            hintBox.classList.toggle('active', s.hintVisible);
+            document.getElementById('prev-btn').disabled = currentIndex === 0;
+            document.getElementById('next-btn').innerText = currentIndex === quizData.length - 1 ? 'Finish' : 'Next';
         }
 
-        document.getElementById('prev-btn').onclick = () => {
-            if (mode === 'results') return;
-            if (currentIndex > 0) {
-                currentIndex--;
+        window.selectOption = function(idx) {
+            if (state[currentIndex].selectedIndex === null) {
+                state[currentIndex].selectedIndex = idx;
                 renderQuestion();
             }
         };
 
+        document.getElementById('hint-toggle').onclick = () => {
+            state[currentIndex].hintVisible = !state[currentIndex].hintVisible;
+            renderQuestion();
+        };
+
+        document.getElementById('prev-btn').onclick = () => { if (currentIndex > 0) { currentIndex--; renderQuestion(); }};
         document.getElementById('next-btn').onclick = () => {
-            if (mode === 'results') return;
-            if (mode === 'review') {
-                if (currentIndex < quizData.length - 1) {
-                    currentIndex++;
-                    renderQuestion();
-                } else {
-                    mode = 'results';
-                    renderResults();
-                }
-                return;
-            }
             if (currentIndex < quizData.length - 1) {
                 currentIndex++;
                 renderQuestion();
             } else {
-                mode = 'results';
                 renderResults();
             }
         };
 
-        document.getElementById('hint-toggle').onclick = toggleHint;
+        function renderResults() {
+            const stats = getStats();
+            document.getElementById('quiz-content').innerHTML = `
+                <div style="text-align: center; padding: 40px 0;">
+                    <h1 class="question-text">Quiz Complete</h1>
+                    <p style="font-size: 1.2em; color: #4a5568;">You mastered ${stats.correct} out of ${stats.total} questions!</p>
+                    <button onclick="location.reload()" class="btn btn-next">Retake Quiz</button>
+                </div>
+            `;
+            document.getElementById('hint-box').classList.add('hidden');
+            document.querySelector('.navigation').classList.add('hidden');
+        }
 
         renderQuestion();
     </script>
 </body>
-</html>
