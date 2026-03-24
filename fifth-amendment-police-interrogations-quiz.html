@@ -1,0 +1,649 @@
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>THE FIFTH AMENDMENT & POLICE INTERROGATIONS QUIZ</title>
+    <link rel="icon" href="/exercises/favicon.ico" type="image/x-icon">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@600;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap');
+
+        :root {
+            /* Custom Deep Blue Theme */
+            --bg: #0B4779; /* Lighter top gradient */
+            --bg-deep: #02376B; /* Your requested deep blue */
+            --ink: #ffffff; /* White text for dark BG */
+            --muted: #cbd5e0;
+            --accent: #461901; /* Warm gold/orange for contrast */
+            --accent-light: #ffbd7f;
+            --accent-dark: #e67e22;
+            --teal: #4cd137; 
+            --card: #f5deb3; /* Keep cards white for readability */
+            --card-text: #0C0A09; /* Text inside the white cards */
+            --stroke: #2d3436;
+            --shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+            --radius-sm: 10px;
+            --radius-md: 12px;
+            --radius-lg: 14px;
+            --radius-xl: 18px;
+            --radius-2xl: 22px;
+            --font-display: 'Space Grotesk', sans-serif;
+            --font-body: 'IBM Plex Sans', sans-serif;
+            --error: #ff7675;
+        }
+
+        body {
+            font-family: var(--font-body);
+            /* Rich gradient using your requested #0B4779 */
+            background: radial-gradient(circle at top left, var(--bg), var(--bg-deep) 70%);
+            color: var(--ink);
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .quiz-container {
+            width: 100%;
+            max-width: 800px;
+            padding: 32px 24px;
+            box-sizing: border-box;
+            background: var(--card);
+            color: var(--card-text); /* Ensure questions/options are dark on white */
+            border-radius: var(--radius-2xl);
+            box-shadow: var(--shadow);
+        }
+
+        .progress-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+        }
+
+        .progress-text { color: #718096; font-size: 0.9em; font-weight: 600; }
+        .status-bar { display: flex; gap: 16px; font-size: 0.9em; font-weight: 500; }
+        .status-correct { color: #2e7d32; }
+        .status-wrong { color: #d32f2f; }
+
+        .question-text {
+            font-family: var(--font-display);
+            font-size: 1.5em;
+            font-weight: 700;
+            margin-bottom: 32px;
+            line-height: 1.3;
+            color: #000000;
+        }
+
+        .options-list {
+            list-style: none;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .option-item {
+            background-color: #f8fafc;
+            border: 2px solid #461901;
+            padding: 16px;
+            border-radius: var(--radius-lg);
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .option-item:hover:not(.selected) {
+            background-color: #f1f5f9;
+            border-color: #432004;
+            transform: translateX(5px);
+        }
+
+        .option-item.selected.correct {
+            background-color: #f0fff4;
+            border-color: #48bb78;
+        }
+
+        .option-item.selected.incorrect {
+            background-color: #fff5f5;
+            border-color: #f56565;
+        }
+
+        .option-item.revealed-correct {
+            border-color: #48bb78;
+            background-color: #f0fff4;
+        }
+
+        .feedback-state { font-weight: bold; font-size: 0.9em; display: none; margin-top: 4px; }
+        .selected .feedback-state, .revealed-correct .feedback-state { display: block; }
+        .correct .feedback-state, .revealed-correct .feedback-state { color: #2f855a; }
+        .incorrect .feedback-state { color: #c53030; }
+
+        .rationale { font-size: 0.95em; color: #4a5568; margin-top: 6px; display: none; }
+        .selected .rationale, .revealed-correct .rationale { display: block; }
+
+        .hint-content {
+            margin-top: 24px;
+            padding: 16px;
+            background-color: #fffaf0;
+            border-left: 4px solid var(--accent);
+            border-radius: var(--radius-md);
+            display: none;
+            color: #0C0A09;
+        }
+        .hint-content.active { display: block; }
+
+        .navigation {
+            margin-top: 32px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .btn {
+            border-radius: var(--radius-md);
+            padding: 12px 24px;
+            font-size: 0.95em;
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+            transition: all 0.2s ease;
+        }
+
+        .btn-prev { background-color: #edf2f7; color: #4a5568; }
+        .btn-next { background: var(--bg-deep); color: #fff; }
+        .btn-next:hover { opacity: 0.9; transform: translateY(-2px); }
+
+        .hidden { display: none; }
+    </style>
+</head>
+<body>
+    <div class="quiz-container">
+        <div id="quiz-content"></div>
+        <div id="results-content" class="hidden"></div>
+        <div id="hint-box" class="hint-content"></div>
+
+        <div class="navigation">
+            <button id="hint-toggle" class="btn btn-prev">💡 Hint</button>
+            <div class="nav-buttons">
+                <button id="prev-btn" class="btn btn-prev">Previous</button>
+                <button id="next-btn" class="btn btn-next">Next</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const quizData = [
+                    {
+                                "question": "Which amendment to the United States Constitution provides that no person shall be compelled in any criminal case to be a witness against himself?",
+                                "hint": "It is the specific constitutional provision that addresses self-incrimination.",
+                                "answerOptions": [
+                                            {
+                                                        "text": "First Amendment",
+                                                        "isCorrect": false,
+                                                        "rationale": "Incorrect: First Amendment does not match the rule/authority described in the question."
+                                            },
+                                            {
+                                                        "text": "Fourth Amendment",
+                                                        "isCorrect": false,
+                                                        "rationale": "Incorrect: Fourth Amendment does not match the rule/authority described in the question."
+                                            },
+                                            {
+                                                        "text": "Fifth Amendment",
+                                                        "isCorrect": true,
+                                                        "rationale": "Correct: Fifth Amendment is the relevant legal concept/authority for this question."
+                                            },
+                                            {
+                                                        "text": "Sixth Amendment",
+                                                        "isCorrect": false,
+                                                        "rationale": "Incorrect: Sixth Amendment does not match the rule/authority described in the question."
+                                            }
+                                ]
+                    },
+                    {
+                                "question": "Under the Rules of Evidence, what is the legal term for an out-of-court statement offered to prove the truth of the matter asserted, which prevents a suspect's exculpatory statements to police from being used in their favor at trial?",
+                                "hint": "Think of the rule that generally excludes 'second-hand' information or statements made outside of the courtroom.",
+                                "answerOptions": [
+                                            {
+                                                        "text": "Hearsay",
+                                                        "isCorrect": true,
+                                                        "rationale": "Correct: Hearsay is the relevant legal concept/authority for this question."
+                                            },
+                                            {
+                                                        "text": "Double Jeopardy",
+                                                        "isCorrect": false,
+                                                        "rationale": "Incorrect: Double Jeopardy does not match the rule/authority described in the question."
+                                            },
+                                            {
+                                                        "text": "Probable Cause",
+                                                        "isCorrect": false,
+                                                        "rationale": "Incorrect: Probable Cause does not match the rule/authority described in the question."
+                                            },
+                                            {
+                                                        "text": "Waiver",
+                                                        "isCorrect": false,
+                                                        "rationale": "Incorrect: Waiver does not match the rule/authority described in the question."
+                                            }
+                                ]
+                    },
+                    {
+                                "question": "According to the Supreme Court in Ohio v. Reiner, what is one of the basic functions of the Fifth Amendment?",
+                                "hint": "The court emphasized how the amendment serves those who have done nothing wrong but might be trapped by facts they can't control.",
+                                "answerOptions": [
+                                            {
+                                                        "text": "To ensure a speedy trial",
+                                                        "isCorrect": false,
+                                                        "rationale": "Incorrect: To ensure a speedy trial does not match the rule/authority described in the question."
+                                            },
+                                            {
+                                                        "text": "To protect innocent men from being ensnared by ambiguous circumstances",
+                                                        "isCorrect": true,
+                                                        "rationale": "Correct: To protect innocent men from being ensnared by ambiguous circumstances is the relevant legal concept/authority for this question."
+                                            },
+                                            {
+                                                        "text": "To guarantee the right to a jury of one's peers",
+                                                        "isCorrect": false,
+                                                        "rationale": "Incorrect: To guarantee the right to a jury of one's peers does not match the rule/authority described in the question."
+                                            },
+                                            {
+                                                        "text": "To allow police to conduct searches without warrants",
+                                                        "isCorrect": false,
+                                                        "rationale": "Incorrect: To allow police to conduct searches without warrants does not match the rule/authority described in the question."
+                                            }
+                                ]
+                    },
+                    {
+                                "question": "What percentage of innocent people later exonerated by DNA evidence made incriminating statements or confessions, according to the Innocence Project?",
+                                "hint": "It is more than one-fourth of the total cases documented.",
+                                "answerOptions": [
+                                            {
+                                                        "text": "Over 10%",
+                                                        "isCorrect": false,
+                                                        "rationale": "Incorrect: Over 10% does not match the rule/authority described in the question."
+                                            },
+                                            {
+                                                        "text": "Over 25%",
+                                                        "isCorrect": true,
+                                                        "rationale": "Correct: Over 25% is the relevant legal concept/authority for this question."
+                                            },
+                                            {
+                                                        "text": "Exactly 50%",
+                                                        "isCorrect": false,
+                                                        "rationale": "Incorrect: Exactly 50% does not match the rule/authority described in the question."
+                                            },
+                                            {
+                                                        "text": "Nearly 75%",
+                                                        "isCorrect": false,
+                                                        "rationale": "Incorrect: Nearly 75% does not match the rule/authority described in the question."
+                                            }
+                                ]
+                    },
+                    {
+                                "question": "Which federal law makes it an offense to transport fish or wildlife taken in violation of any foreign law, potentially leading to convictions for unknown regulations?",
+                                "hint": "This act is often cited as an example of how citizens can unknowingly violate federal law through administrative regulations.",
+                                "answerOptions": [
+                                            {
+                                                        "text": "The Patriot Act",
+                                                        "isCorrect": false,
+                                                        "rationale": "Incorrect: The Patriot Act does not match the rule/authority described in the question."
+                                            },
+                                            {
+                                                        "text": "The Lacey Act",
+                                                        "isCorrect": true,
+                                                        "rationale": "Correct: The Lacey Act is the relevant legal concept/authority for this question."
+                                            },
+                                            {
+                                                        "text": "The Miranda Act",
+                                                        "isCorrect": false,
+                                                        "rationale": "Incorrect: The Miranda Act does not match the rule/authority described in the question."
+                                            },
+                                            {
+                                                        "text": "The Internal Revenue Code",
+                                                        "isCorrect": false,
+                                                        "rationale": "Incorrect: The Internal Revenue Code does not match the rule/authority described in the question."
+                                            }
+                                ]
+                    },
+                    {
+                                "question": "How can a seemingly innocent statement, such as \"I never liked the guy,\" be used against a suspect at trial?",
+                                "hint": "Consider what a prosecutor needs to prove besides the act itself—why someone might have done it.",
+                                "answerOptions": [
+                                            {
+                                                        "text": "It can be used to establish motive",
+                                                        "isCorrect": true,
+                                                        "rationale": "Correct: It can be used to establish motive is the relevant legal concept/authority for this question."
+                                            },
+                                            {
+                                                        "text": "It is considered a full confession",
+                                                        "isCorrect": false,
+                                                        "rationale": "Incorrect: It is considered a full confession does not match the rule/authority described in the question."
+                                            },
+                                            {
+                                                        "text": "It proves the suspect had a weapon",
+                                                        "isCorrect": false,
+                                                        "rationale": "Incorrect: It proves the suspect had a weapon does not match the rule/authority described in the question."
+                                            },
+                                            {
+                                                        "text": "It cannot be used if it is true",
+                                                        "isCorrect": false,
+                                                        "rationale": "Incorrect: It cannot be used if it is true does not match the rule/authority described in the question."
+                                            }
+                                ]
+                    },
+                    {
+                                "question": "What is the primary reason why even a videotaped statement can be dangerous for an innocent person?",
+                                "hint": "Think about the timeline of an interview and what happens before the 'record' button is pressed.",
+                                "answerOptions": [
+                                            {
+                                                        "text": "Video technology is often unreliable",
+                                                        "isCorrect": false,
+                                                        "rationale": "Incorrect: Video technology is often unreliable does not match the rule/authority described in the question."
+                                            },
+                                            {
+                                                        "text": "Police can misremember what they told the suspect before the recording started",
+                                                        "isCorrect": true,
+                                                        "rationale": "Correct: Police can misremember what they told the suspect before the recording started is the relevant legal concept/authority for this question."
+                                            },
+                                            {
+                                                        "text": "Juries are not allowed to watch police videos",
+                                                        "isCorrect": false,
+                                                        "rationale": "Incorrect: Juries are not allowed to watch police videos does not match the rule/authority described in the question."
+                                            },
+                                            {
+                                                        "text": "A lawyer cannot be present during a video",
+                                                        "isCorrect": false,
+                                                        "rationale": "Incorrect: A lawyer cannot be present during a video does not match the rule/authority described in the question."
+                                            }
+                                ]
+                    },
+                    {
+                                "question": "Martha Stewart and Marion Jones were both sentenced to prison primarily for what action?",
+                                "hint": "It wasn't the original crime being investigated that led to their prison time, but the statements they made during the process.",
+                                "answerOptions": [
+                                            {
+                                                        "text": "Committing armed robbery",
+                                                        "isCorrect": false,
+                                                        "rationale": "Incorrect: Committing armed robbery does not match the rule/authority described in the question."
+                                            },
+                                            {
+                                                        "text": "Violating the Lacey Act",
+                                                        "isCorrect": false,
+                                                        "rationale": "Incorrect: Violating the Lacey Act does not match the rule/authority described in the question."
+                                            },
+                                            {
+                                                        "text": "Lying to federal investigators",
+                                                        "isCorrect": true,
+                                                        "rationale": "Correct: Lying to federal investigators is the relevant legal concept/authority for this question."
+                                            },
+                                            {
+                                                        "text": "Refusing to talk to the police",
+                                                        "isCorrect": false,
+                                                        "rationale": "Incorrect: Refusing to talk to the police does not match the rule/authority described in the question."
+                                            }
+                                ]
+                    },
+                    {
+                                "question": "In the state of Virginia, how many parties to a phone conversation must consent for it to be legally recorded?",
+                                "hint": "This rule allows a police officer to record a call without informing the person on the other end.",
+                                "answerOptions": [
+                                            {
+                                                        "text": "One party",
+                                                        "isCorrect": true,
+                                                        "rationale": "Correct: One party is the relevant legal concept/authority for this question."
+                                            },
+                                            {
+                                                        "text": "Two parties",
+                                                        "isCorrect": false,
+                                                        "rationale": "Incorrect: Two parties does not match the rule/authority described in the question."
+                                            },
+                                            {
+                                                        "text": "A judge must consent",
+                                                        "isCorrect": false,
+                                                        "rationale": "Incorrect: A judge must consent does not match the rule/authority described in the question."
+                                            },
+                                            {
+                                                        "text": "No consent is required",
+                                                        "isCorrect": false,
+                                                        "rationale": "Incorrect: No consent is required does not match the rule/authority described in the question."
+                                            }
+                                ]
+                    },
+                    {
+                                "question": "What common psychological phenomenon was demonstrated by the 'pop quiz' regarding the murder news story?",
+                                "hint": "Think about why people thought they heard about a 'shooting' when that word was never mentioned.",
+                                "answerOptions": [
+                                            {
+                                                        "text": "The human mind naturally fills in details that weren't actually stated",
+                                                        "isCorrect": true,
+                                                        "rationale": "Correct: The human mind naturally fills in details that weren't actually stated is the relevant legal concept/authority for this question."
+                                            },
+                                            {
+                                                        "text": "People have perfect recall in relaxed settings",
+                                                        "isCorrect": false,
+                                                        "rationale": "Incorrect: People have perfect recall in relaxed settings does not match the rule/authority described in the question."
+                                            },
+                                            {
+                                                        "text": "Law students are better at remembering facts than the general public",
+                                                        "isCorrect": false,
+                                                        "rationale": "Incorrect: Law students are better at remembering facts than the general public does not match the rule/authority described in the question."
+                                            },
+                                            {
+                                                        "text": "Visual memory is stronger than auditory memory",
+                                                        "isCorrect": false,
+                                                        "rationale": "Incorrect: Visual memory is stronger than auditory memory does not match the rule/authority described in the question."
+                                            }
+                                ]
+                    },
+                    {
+                                "question": "Why might a police officer prefer the term \"interview\" over \"interrogation\"?",
+                                "hint": "It is a matter of semantics and the psychological impact on the person being questioned.",
+                                "answerOptions": [
+                                            {
+                                                        "text": "Interrogations are illegal in the United States",
+                                                        "isCorrect": false,
+                                                        "rationale": "Incorrect: Interrogations are illegal in the United States does not match the rule/authority described in the question."
+                                            },
+                                            {
+                                                        "text": "An \"interview\" sounds less intimidating and encourages the suspect to talk",
+                                                        "isCorrect": true,
+                                                        "rationale": "Correct: An \"interview\" sounds less intimidating and encourages the suspect to talk is the relevant legal concept/authority for this question."
+                                            },
+                                            {
+                                                        "text": "Interviews do not require Miranda warnings",
+                                                        "isCorrect": false,
+                                                        "rationale": "Incorrect: Interviews do not require Miranda warnings does not match the rule/authority described in the question."
+                                            },
+                                            {
+                                                        "text": "Only detectives can conduct interrogations",
+                                                        "isCorrect": false,
+                                                        "rationale": "Incorrect: Only detectives can conduct interrogations does not match the rule/authority described in the question."
+                                            }
+                                ]
+                    },
+                    {
+                                "question": "What is a common tactic used by police to obtain a written confession from a suspect who believes they are being helpful?",
+                                "hint": "The tactic appeals to the suspect's sense of remorse or a desire to 'make things right.'",
+                                "answerOptions": [
+                                            {
+                                                        "text": "Asking them to write an apology letter to the victim",
+                                                        "isCorrect": true,
+                                                        "rationale": "Correct: Asking them to write an apology letter to the victim is the relevant legal concept/authority for this question."
+                                            },
+                                            {
+                                                        "text": "Forcing them to sign a pre-written statement",
+                                                        "isCorrect": false,
+                                                        "rationale": "Incorrect: Forcing them to sign a pre-written statement does not match the rule/authority described in the question."
+                                            },
+                                            {
+                                                        "text": "Promising that a written statement will result in no charges",
+                                                        "isCorrect": false,
+                                                        "rationale": "Incorrect: Promising that a written statement will result in no charges does not match the rule/authority described in the question."
+                                            },
+                                            {
+                                                        "text": "Telling them the letter will not be used in court",
+                                                        "isCorrect": false,
+                                                        "rationale": "Incorrect: Telling them the letter will not be used in court does not match the rule/authority described in the question."
+                                            }
+                                ]
+                    },
+                    {
+                                "question": "According to Justice Robert Jackson, what should a lawyer 'worth his salt' tell a suspect?",
+                                "hint": "His advice was absolute and left no room for exceptions during initial police contact.",
+                                "answerOptions": [
+                                            {
+                                                        "text": "To tell the truth and hope for the best",
+                                                        "isCorrect": false,
+                                                        "rationale": "Incorrect: To tell the truth and hope for the best does not match the rule/authority described in the question."
+                                            },
+                                            {
+                                                        "text": "To make no statement to the police under any circumstances",
+                                                        "isCorrect": true,
+                                                        "rationale": "Correct: To make no statement to the police under any circumstances is the relevant legal concept/authority for this question."
+                                            },
+                                            {
+                                                        "text": "To only talk if a deal is on the table",
+                                                        "isCorrect": false,
+                                                        "rationale": "Incorrect: To only talk if a deal is on the table does not match the rule/authority described in the question."
+                                            },
+                                            {
+                                                        "text": "To explain their innocence clearly and concisely",
+                                                        "isCorrect": false,
+                                                        "rationale": "Incorrect: To explain their innocence clearly and concisely does not match the rule/authority described in the question."
+                                            }
+                                ]
+                    },
+                    {
+                                "question": "What is one way a suspect's truthful alibi can be used to convict them?",
+                                "hint": "Consider the effect of a witness who is sincere but completely wrong about seeing the suspect elsewhere.",
+                                "answerOptions": [
+                                            {
+                                                        "text": "Alibis are never admissible in court",
+                                                        "isCorrect": false,
+                                                        "rationale": "Incorrect: Alibis are never admissible in court does not match the rule/authority described in the question."
+                                            },
+                                            {
+                                                        "text": "If the police find a mistaken witness who contradicts the alibi, the suspect looks like a liar",
+                                                        "isCorrect": true,
+                                                        "rationale": "Correct: If the police find a mistaken witness who contradicts the alibi, the suspect looks like a liar is the relevant legal concept/authority for this question."
+                                            },
+                                            {
+                                                        "text": "The police can change the date of the crime to match the alibi",
+                                                        "isCorrect": false,
+                                                        "rationale": "Incorrect: The police can change the date of the crime to match the alibi does not match the rule/authority described in the question."
+                                            },
+                                            {
+                                                        "text": "A truthful alibi proves the suspect had a motive",
+                                                        "isCorrect": false,
+                                                        "rationale": "Incorrect: A truthful alibi proves the suspect had a motive does not match the rule/authority described in the question."
+                                            }
+                                ]
+                    },
+                    {
+                                "question": "Why is it virtually impossible for a suspect to 'talk their way out of' an arrest?",
+                                "hint": "Think about the timing of when police decide to bring someone in for an 'interview.'",
+                                "answerOptions": [
+                                            {
+                                                        "text": "Police are legally required to arrest anyone they interview",
+                                                        "isCorrect": false,
+                                                        "rationale": "Incorrect: Police are legally required to arrest anyone they interview does not match the rule/authority described in the question."
+                                            },
+                                            {
+                                                        "text": "Police usually only conduct interviews after they already have evidence pointing to guilt",
+                                                        "isCorrect": true,
+                                                        "rationale": "Correct: Police usually only conduct interviews after they already have evidence pointing to guilt is the relevant legal concept/authority for this question."
+                                            },
+                                            {
+                                                        "text": "The law forbids police from releasing suspects once questioning begins",
+                                                        "isCorrect": false,
+                                                        "rationale": "Incorrect: The law forbids police from releasing suspects once questioning begins does not match the rule/authority described in the question."
+                                            },
+                                            {
+                                                        "text": "Suspects are not allowed to speak during an arrest",
+                                                        "isCorrect": false,
+                                                        "rationale": "Incorrect: Suspects are not allowed to speak during an arrest does not match the rule/authority described in the question."
+                                            }
+                                ]
+                    }
+        ];
+
+        let currentIndex = 0;
+        let state = quizData.map(() => ({ selectedIndex: null, hintVisible: false }));
+
+        function getStats() {
+            const answered = state.filter(s => s.selectedIndex !== null).length;
+            const correct = state.filter((s, i) => s.selectedIndex !== null && quizData[i].answerOptions[s.selectedIndex].isCorrect).length;
+            return { answered, correct, total: quizData.length };
+        }
+
+        function renderQuestion() {
+            const q = quizData[currentIndex];
+            const s = state[currentIndex];
+            const content = document.getElementById('quiz-content');
+            const stats = getStats();
+
+            let optionsHtml = q.answerOptions.map((opt, idx) => {
+                const isSelected = s.selectedIndex === idx;
+                const statusClass = isSelected ? (opt.isCorrect ? 'correct' : 'incorrect') : '';
+                const revealClass = (s.selectedIndex !== null && opt.isCorrect) ? 'revealed-correct' : '';
+                return `
+                    <li class="option-item ${isSelected ? 'selected' : ''} ${statusClass} ${revealClass}" onclick="selectOption(${idx})">
+                        <strong>${String.fromCharCode(65 + idx)}.</strong> ${opt.text}
+                        <div class="feedback-state">${opt.isCorrect ? '✓ Correct' : '✕ Incorrect'}</div>
+                        <div class="rationale">${opt.rationale}</div>
+                    </li>`;
+            }).join('');
+
+            content.innerHTML = `
+                <div class="progress-container">
+                    <div class="progress-text">QUESTION ${currentIndex + 1} OF ${quizData.length}</div>
+                    <div class="status-bar">
+                        <span class="status-correct">✓ ${stats.correct}</span>
+                    </div>
+                </div>
+                <div class="question-text">${q.question}</div>
+                <ul class="options-list">${optionsHtml}</ul>
+            `;
+
+            const hintBox = document.getElementById('hint-box');
+            hintBox.innerText = q.hint;
+            hintBox.classList.toggle('active', s.hintVisible);
+            document.getElementById('prev-btn').disabled = currentIndex === 0;
+            document.getElementById('next-btn').innerText = currentIndex === quizData.length - 1 ? 'Finish' : 'Next';
+        }
+
+        window.selectOption = function(idx) {
+            if (state[currentIndex].selectedIndex === null) {
+                state[currentIndex].selectedIndex = idx;
+                renderQuestion();
+            }
+        };
+
+        document.getElementById('hint-toggle').onclick = () => {
+            state[currentIndex].hintVisible = !state[currentIndex].hintVisible;
+            renderQuestion();
+        };
+
+        document.getElementById('prev-btn').onclick = () => { if (currentIndex > 0) { currentIndex--; renderQuestion(); }};
+        document.getElementById('next-btn').onclick = () => {
+            if (currentIndex < quizData.length - 1) {
+                currentIndex++;
+                renderQuestion();
+            } else {
+                renderResults();
+            }
+        };
+
+        function renderResults() {
+            const stats = getStats();
+            document.getElementById('quiz-content').innerHTML = `
+                <div style="text-align: center; padding: 40px 0;">
+                    <h1 class="question-text">Quiz Complete</h1>
+                    <p style="font-size: 1.2em; color: #4a5568;">You mastered ${stats.correct} out of ${stats.total} questions!</p>
+                    <button onclick="location.reload()" class="btn btn-next">Retake Quiz</button>
+                </div>
+            `;
+            document.getElementById('hint-box').classList.add('hidden');
+            document.querySelector('.navigation').classList.add('hidden');
+        }
+
+        renderQuestion();
+    </script>
+</body>
