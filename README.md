@@ -1,60 +1,36 @@
-# Studies De Jure: decision-tree exercises
+# Studies De Jure: browser decision-tree editor
 
-A buildless browser app for GitHub Pages. The first exercise analyzes negligence through text choices and a clickable SVG decision tree. No Node installation, server, account, external script, or build step is required to use it.
+For everyday use, read **START-HERE.md** and open **exercise-editor.html**. The standalone editor requires no installation, server, external scripts, or code editing. It includes the negligence example and exports each student exercise as a complete standalone HTML file.
 
-## Publish on GitHub Pages
+## Included experiences
 
-1. Extract `negligence-decision-app.zip`. Upload its contents to the repository’s `main` branch, keeping `assets/` and `tests/` as folders. Put `index.html` directly at the repository root, not inside an extra enclosing folder.
-2. In this repository, open **Settings → Pages**.
-3. Under **Build and deployment**, select **Deploy from a branch**.
-4. Select **main** and **/(root)**, then **Save**.
-5. Once GitHub finishes publishing, open https://profmackelly.github.io/exercises/.
+- `exercise-editor.html`: a self-contained copy of the browser editor. Upload this one file to GitHub Pages or open it locally.
+- `editor.html`: the same editor using the separate assets in `assets/`.
+- `index.html`: the default student negligence exercise using the separate assets.
+- JSON project export/import for editing backups, browser draft saving, page and branch forms, Markdown explanations, automatic SVG diagram layout, and a student preview.
 
-The root `index.html` is the app. Existing sample files are retained. `.nojekyll` tells Pages to serve the static files without Jekyll processing.
+Edits do not publish automatically. Export student HTML and upload it to GitHub. New exercise files coexist under separate URLs. Existing sample repository files are retained.
 
-## Use the app
+## For maintainers
 
-- **Both** shows the question page alongside the diagram.
-- **Questions** and **Diagram** show either view by itself.
-- Text choices follow an answer branch and record the route.
-- Clicking a diagram node opens its page and starts a fresh exploration route. It does not assume earlier questions have been answered.
-- **Back** retraces navigation, including diagram jumps. Browser Back/Forward work too.
-- **Restart** starts a fresh analysis. Previous browser-history entries remain available.
-- Diagram nodes and buttons support keyboard access. Zoom controls change diagram size; scroll the diagram to navigate it.
-- Each page has a bookmarkable hash URL, for example `https://profmackelly.github.io/exercises/#/breach`. Refreshing preserves the page. A newly opened bookmark starts without an earlier answer route.
-- This is an exploratory teaching exercise, not an automatically graded quiz. Answers are not submitted or stored on a server.
+Content validation and layout are in `assets/model.js`, basic safe Markdown display in `assets/markdown.js`, student behavior in `assets/app.js`, export logic in `assets/export.js`, and editor behavior in `assets/editor.js`.
 
-## Edit questions, explanations, and branches
+`assets/tree.js` supplies the default example. After changing student HTML, CSS, or runtime, regenerate the embedded export template and standalone editor:
 
-Open `assets/tree.js`. The exercise is a JavaScript object containing plain text:
-
-```js
-{
-  id: 'duty',                     // unique lowercase id
-  label: 'Duty?',                  // diagram label; \n gives a line break
-  row: 0, column: 0,               // diagram position, starting at zero
-  title: 'Does a duty exist?',     // page heading
-  category: '01 · DUTY',
-  body: 'Explain the rule here.',
-  prompt: 'Ask for reasoning.',    // optional
-  example: 'Discuss a fact.',      // optional
-  choices: [
-    { label: 'Yes', to: 'damages', edge: 'Yes' },
-    { label: 'No', to: 'no-duty', edge: 'No' }
-  ]
-}
+```sh
+python scripts/build-export-template.py
+python scripts/build-editor.py
+node --test tests/*.test.cjs
 ```
 
-Each `to` must match another node's `id`. An outcome has `choices: []` and may have `type: 'success'` or `type: 'failure'`. Use distinct row/column positions; the diagram draws its arrows directly from the choices. Change `start` to choose the first page. The app validates duplicate IDs, positions, and missing destinations.
+The editor exports JSON projects with format `decision-tree-project`, version `1`, and an `exercise` object. Page IDs remain stable when titles are edited. The shared validator checks text fields, IDs, destinations, outcome/choice consistency, and cycles. Unreachable pages produce warnings. The longest-path layout handles branches that rejoin; it does not minimize crossing lines.
 
-Change visual styling in `assets/styles.css` and behavior in `assets/app.js`. The diagram is generated from the same data as the text; you do not need to maintain separate Mermaid syntax. Importing an existing Mermaid diagram or parsing prose into a tree is not included in this prototype.
+The safe Markdown subset creates DOM nodes and never executes raw HTML. JSON embedded in HTML escapes `<` to prevent closing-script injection. Project imports parse JSON rather than executing JavaScript. The editor iframe allows scripts without same-origin access.
 
-## Local use and checks
+There are no server writes, accounts, secrets, or direct GitHub publishing. Browser draft storage is a convenience; project downloads are the durable editing backups. Limits: 100 pages, 12 choices per page, 5 MB imported project files. Unsupported Markdown includes tables, images, nested lists, raw HTML, and wiki links.
 
-Open `index.html` directly in a browser, or run `python -m http.server 8000` in the repository and visit http://localhost:8000/.
+## Checks
 
-For automated checks, run `node --test tests/app.test.cjs`. These checks use a lightweight DOM harness and verify branch paths, routing, browser history, exploration, and display controls. They do not replace visual browser testing.
+Run `node --test tests/*.test.cjs`. Seventeen checks cover student navigation, missing-element outcomes, defenses, history, diagram jumps, views/zoom, editing, import/export, drafts, cycle/destination validation, unsafe input handling, and export-template consistency. These use a lightweight DOM/history harness; visual browser QA remains unverified.
 
-## Legal content
-
-This general teaching model follows Duty → Harm → Breach → Factual cause → Proximate cause → Defenses. A defense can reduce or bar recovery. Adapt the content to the relevant jurisdiction and course. Cornell LII source links are included in the app footer; no particular state's fault threshold is assumed.
+The negligence material is a general teaching model and must be adapted to applicable jurisdictional rules. Source links are included in the default example. Fresh exercises begin with empty scenario/source fields.
