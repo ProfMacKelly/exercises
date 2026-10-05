@@ -7,6 +7,7 @@ For everyday use, read **START-HERE.md** and open **exercise-editor.html**. The 
 - `exercise-editor.html`: a self-contained copy of the browser editor. Upload this one file to GitHub Pages or open it locally.
 - `editor.html`: the same editor using the separate assets in `assets/`.
 - `index.html`: the default student negligence exercise using the separate assets.
+- `negligence.html`: the standalone student example with embedded fonts and styling.
 - JSON project export/import for editing backups, browser draft saving, page and branch forms, Markdown explanations, automatic SVG diagram layout, and a student preview.
 
 Edits do not publish automatically. Export student HTML and upload it to GitHub. New exercise files coexist under separate URLs. Existing sample repository files are retained.
@@ -34,3 +35,9 @@ There are no server writes, accounts, secrets, or direct GitHub publishing. Brow
 Run `node --test tests/*.test.cjs`. Seventeen checks cover student navigation, missing-element outcomes, defenses, history, diagram jumps, views/zoom, editing, import/export, drafts, cycle/destination validation, unsafe input handling, and export-template consistency. These use a lightweight DOM/history harness; visual browser QA remains unverified.
 
 The negligence material is a general teaching model and must be adapted to applicable jurisdictional rules. Source links are included in the default example. Fresh exercises begin with empty scenario/source fields.
+
+## Studies De Jure branding
+
+Theme settings were read through the GitBook API for site `site_6HspR` (including its published space overrides): Inter, inherited heading font, IBM Plex Mono, bold theme, primary/tint blue #0B4779. The exercise header uses this blue and the fonts; a pixel-level match to the original header geometry has not been verified. Fonts are embedded in `assets/fonts.css` and carried into the standalone editor and exports. SIL Open Font License text is included in the embedded CSS and in `licenses/`.
+
+Previously exported files require re-exporting to acquire the new branding. JSON project compatibility and browser draft storage keys are unchanged.

@@ -24,7 +24,7 @@ function boot(hash='') {
   const document={createElement:tag=>new Element(tag),createElementNS:(_,tag)=>new Element(tag),createTextNode:t=>{const e=new Element('text');e.textContent=t;return e;},getElementById:id=>ids[id],querySelectorAll:()=>modes};
   const window={addEventListener:(key,fn)=>(events[key] ||= []).push(fn)};
   const ctx=vm.createContext({window,document,history,location});
-  for(const file of ['tree.js','app.js'])vm.runInContext(fs.readFileSync(path.join(root,'assets',file),'utf8'),ctx);
+  for(const file of ['tree.js','model.js','markdown.js','app.js'])vm.runInContext(fs.readFileSync(path.join(root,'assets',file),'utf8'),ctx);
   return {ids,modes,history,location,tree:window.EXERCISE,validate:window.validateExercise,answer(i=0){ids.question.querySelectorAll('button')[i].click();},jump(id){ids.diagram.querySelectorAll('a').find(a=>a.dataset.node===id).click();}};
 }
 test('all elements lead to recovery; back and forward restore the route',()=>{
@@ -58,9 +58,9 @@ test('view and zoom controls work with bounded zoom',()=>{
  for(let i=0;i<20;i++)app.ids['zoom-in'].click();assert.equal(app.ids['zoom-reset'].textContent,'160%');
  app.ids['zoom-reset'].click();assert.equal(app.ids['zoom-reset'].textContent,'100%');
 });
-test('data validator rejects broken destinations, duplicate IDs, and overlapping nodes',()=>{
+test('data validator rejects broken destinations and duplicate IDs; layout prevents overlap',()=>{
  const app=boot();const clone=()=>JSON.parse(JSON.stringify(app.tree));
- let data=clone();data.nodes[0].choices[0].to='missing';assert.throws(()=>app.validate(data),/Missing destination/);
+ let data=clone();data.nodes[0].choices[0].to='missing';assert.throws(()=>app.validate(data),/choose a destination/);
  data=clone();data.nodes[1].id=data.nodes[0].id;assert.throws(()=>app.validate(data),/unique/);
- data=clone();data.nodes[1].column=0;assert.throws(()=>app.validate(data),/overlap/);
+ data=clone();data.nodes[1].column=0;const ready=app.validate(data);assert.equal(new Set(ready.nodes.map(n=>`${n.row},${n.column}`)).size,ready.nodes.length);
 });

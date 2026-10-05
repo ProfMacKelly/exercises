@@ -1,3 +1,22 @@
+# Applying the Studies De Jure styling update
+
+The editor and its student exports now use your GitBook theme settings: **Inter** for text and headings, **IBM Plex Mono** for code, and a **#0B4779 blue banner**. Fonts are embedded, so no separate font upload or internet font service is needed. The banner includes a link back to the sourcebook. The sourcebook’s configured fonts and colors were read directly; exact header spacing has not been visually compared because browser access to the reference page was blocked.
+
+## Update your editor and exercises
+
+1. Replace the existing **exercise-editor.html** in your repository with the file in this package.
+2. Open the updated editor. Use **Open project** to load a saved project, or continue with its restored browser draft.
+3. Preview it and click **Export student HTML**. The new export automatically includes the updated fonts and banner.
+4. Upload the exported HTML over the previous exercise file to update that exercise.
+
+Previously exported HTML pages keep their old appearance until you re-export and upload them. Your JSON project files remain compatible; their text and branches do not need to be rewritten. Refresh the editor after GitHub finishes publishing if you still see the old appearance.
+
+**negligence.html** is a ready-to-upload standalone example with the new styling. Upload it to the repository root to publish `/exercises/negligence.html`. If you want that example at the main site address, make a copy, name the copy **index.html**, and upload it over the current homepage. This sample does not contain any personal edits you may have made to a saved project.
+
+The separate-file source version also has the styling update. If you use that version instead of the standalone editor, upload the revised HTML and assets together.
+
+---
+
 # Start here: edit exercises without editing code
 
 ## Try the editor on your computer

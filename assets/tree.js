@@ -1,7 +1,7 @@
 /* Edit this file to change the exercise. Content is plain text, not HTML.
    Every choice's `to` must match a node id. Diagram row/column start at zero. */
 window.EXERCISE = {
-  title: 'Negligence', start: 'duty',
+  title: 'Negligence', subject: 'BUSINESS LAW · TORTS', intro: 'Reason through negligence, one question at a time.', scope: 'A teaching model of general negligence principles. Apply the jurisdiction’s rules and any exceptions.', references: '[Negligence — Cornell LII](https://www.law.cornell.edu/wex/negligence)\n\n[Comparative negligence — Cornell LII](https://www.law.cornell.edu/wex/comparative_negligence)\n\n[Contributory negligence — Cornell LII](https://www.law.cornell.edu/wex/contributory_negligence)', start: 'duty',
   scenario: 'Alex looks down at a phone while approaching an intersection, misses a red light, and strikes Jordan in the crosswalk. Jordan suffers a broken wrist. Consider how each element applies, then change a fact and explore a different route.',
   nodes: [
     {id:'duty', label:'Duty?', row:0, column:0, title:'Did the defendant owe the plaintiff a duty of care?', category:'01 · DUTY', body:'Identify a legally recognized duty owed to this plaintiff. A duty may arise from creating a risk or from a recognized relationship; there is no universal duty to rescue.', prompt:'What conduct or relationship supports a duty here?', example:'Alex is operating a vehicle near pedestrians. What duty does that activity create toward Jordan?', choices:[{label:'Yes — a duty exists',to:'damages',edge:'Yes'},{label:'No — no duty exists',to:'no-duty',edge:'No'}]},
