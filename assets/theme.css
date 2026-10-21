@@ -1,0 +1,44 @@
+/* Shared Studies De Jure theme. Load after each page's own layout CSS.
+   Fonts are supplied by assets/fonts.css. Keep success/error colors semantic. */
+:root{--sdj-blue:#0b4779;--sdj-hover:#053966;--sdj-ink:#1b2f40;--sdj-muted:#5b6a76;--sdj-line:#dde5ed;--sdj-soft:#eaf2fa;
+ --bg:#fff;--bg-deep:#053966;--ink:var(--sdj-ink);--muted:var(--sdj-muted);--accent:var(--sdj-blue);--accent-light:#17629d;--accent-dark:var(--sdj-hover);--card:#fff;--card-text:var(--sdj-ink);--stroke:var(--sdj-line);--teal:#2c5e36;--error:#a51c26;--shadow:0 1px 3px #0b477910;
+ --font-body:Inter,Arial,sans-serif;--font-display:Inter,Arial,sans-serif;--font-heading:Inter,Arial,sans-serif;--font-code:'IBM Plex Mono',monospace;--color-primary:var(--sdj-blue);--color-link:var(--sdj-blue)}
+html{background:#fff}
+body.sdj-themed{display:block;margin:0;padding:0;min-height:100vh;height:auto;background:#fff;color:var(--sdj-ink);font:16px/1.75 Inter,Arial,sans-serif;-webkit-font-smoothing:antialiased}
+.sdj-themed :is(button,input,select,textarea,label,h1,h2,h3,h4,h5,h6){font-family:Inter,Arial,sans-serif}
+.sdj-themed h1{font-size:36px;line-height:1.25;font-weight:700;letter-spacing:-.025em;color:var(--sdj-ink)}
+.sdj-themed h2{font-size:24px;line-height:1.4;font-weight:600;color:var(--sdj-ink)}
+.sdj-themed h3{font-size:20px;line-height:1.4;font-weight:600;color:var(--sdj-ink)}
+.sdj-themed :is(pre,code,kbd){font-family:'IBM Plex Mono',monospace}
+.sdj-themed :is(.eyebrow,.trail h2,.side-title,.step,.case-label){text-transform:none;letter-spacing:normal;font-size:14px;font-weight:500;color:var(--sdj-muted)}
+.sdj-themed a{color:var(--sdj-blue)}
+.sdj-themed button{font-size:14px;font-weight:500}
+/* Separate header classes avoid collisions with exercise-specific .brand rules. */
+.sdj-themed header.sdj-header{display:block;position:relative;background:var(--sdj-blue);color:#fff;border:0;border-bottom:1px solid var(--sdj-hover);padding:0;margin:0;min-height:80px;width:100%;box-sizing:border-box}
+.sdj-header .sdj-header-inner{box-sizing:border-box;max-width:1400px;min-height:80px;margin:auto;padding:16px 5vw;display:flex;align-items:center;gap:18px;flex-wrap:wrap}
+.sdj-header a.sdj-brand{display:inline-flex;align-items:center;gap:12px;color:#fff;font:600 20px/28px Inter,Arial,sans-serif;text-decoration:none;text-transform:none;letter-spacing:normal;white-space:nowrap;margin:0;padding:0}
+.sdj-header img.sdj-icon{display:block;width:32px;height:32px;object-fit:contain;flex:none;margin:0;padding:0;border:0;border-radius:0}
+.sdj-header .sdj-section{font:400 14px/1.4 Inter,Arial,sans-serif;letter-spacing:normal;text-transform:none;color:#e7eff7;border-left:1px solid #ffffff60;padding-left:18px}
+.sdj-header a.sdj-source{margin-left:auto;color:#fff;font:400 14px/1.4 Inter,Arial,sans-serif;text-decoration:none;padding:7px 10px;border:1px solid #ffffff55;border-radius:6px}
+.sdj-header a.sdj-source:hover{background:#ffffff14;text-decoration:underline}
+.sdj-header a:focus-visible{outline:3px solid white;outline-offset:4px}
+.sdj-content{box-sizing:border-box;max-width:1100px;margin:auto;padding:38px 5vw 64px}
+.sdj-card{border:1px solid var(--sdj-line);border-radius:12px;padding:24px;background:white;box-shadow:var(--shadow)}
+/* Layout adapters: keep the quizzes, editor, and simulation functional. */
+.sdj-themed .quiz-container{margin:32px auto;width:calc(100% - 36px);background:white;color:var(--sdj-ink);border:1px solid var(--sdj-line);border-radius:12px;box-shadow:var(--shadow)}
+.sdj-themed .question-text{font-size:24px;line-height:1.4;font-weight:600;color:var(--sdj-ink)}
+.sdj-themed .hero{background:#f6f8fa;color:var(--sdj-ink);box-shadow:none;padding-top:22px;padding-bottom:22px}
+.sdj-themed .hero p{color:var(--sdj-muted)}
+.sdj-themed .stage-title{color:var(--sdj-ink)}
+.sdj-themed .primary,.sdj-themed .progress span{background:var(--sdj-blue)}
+.sdj-themed .primary:hover{background:var(--sdj-hover)}
+.sdj-themed .secondary,.sdj-themed .q,.sdj-themed label.field{color:var(--sdj-blue)}
+.sdj-themed .option:has(input:checked){border-color:var(--sdj-blue);background:var(--sdj-soft);box-shadow:0 0 0 1px var(--sdj-blue)}
+.sdj-themed .option input{accent-color:var(--sdj-blue)}
+.sdj-themed .page-content{max-width:1000px;margin:auto;padding:30px 24px}
+.sdj-themed :is(.btn-next,.btn-primary){background:var(--sdj-blue);color:white}
+.sdj-themed :is(.btn-next,.btn-primary):hover{background:var(--sdj-hover)}
+.sdj-themed .outcome.success{background:#e9f3eb;color:#2c5e36}
+.sdj-themed .outcome.failure{background:#fff0f1;color:#a51c26}
+@media(max-width:800px){.sdj-header .sdj-header-inner{padding:16px 18px;gap:12px}.sdj-header a.sdj-source{margin-left:0}.sdj-header .sdj-section{padding-left:12px}.sdj-themed h1{font-size:30px}.sdj-themed h2,.sdj-themed .question-text{font-size:22px}.sdj-content{padding:28px 18px 48px}}
+@media print{.sdj-header{display:none!important}.sdj-themed .quiz-container{box-shadow:none}}

@@ -37,9 +37,11 @@
 @media(max-width:800px){.grid{grid-template-columns:1fr}.aside{position:static}.evidence-grid{grid-template-columns:1fr}.finance{grid-template-columns:1fr}.split{grid-template-columns:1fr}.wrap{padding:12px 12px 70px}.hero{padding:24px 18px}}
 @media print{.hero{background:#195b99!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}.aside,.actions,.ev-btn,button{display:none!important}.grid{display:block}.card{box-shadow:none;border:none}.wrap{max-width:none}}
 </style>
+<link rel="stylesheet" href="assets/fonts.css">
+<link rel="stylesheet" href="assets/theme.css">
 </head>
-<body>
-<header class="hero"><div class="brand">Studies De Jure · Case Study</div><p>A real-case simulation about negligence and business responsibility.</p></header>
+<body class="sdj-themed"><header class="site-header sdj-header"><div class="site-header-inner sdj-header-inner"><a class="brand sdj-brand" href="index.html"><img class="brand-icon sdj-icon" src="https://2002530480-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/organizations%2F2KDFCqgo3cAQVrPSYfS9%2Fsites%2Fsite_6HspR%2Ficon%2FSqEo6YZT3YjYTLnl7Rqs%2Fscale-on-light-books.png?alt=media&amp;token=b6120ab6-5de1-41fd-83a1-9abf7dfdc0e7" alt="" width="32" height="32"><span>Studies De Jure</span></a><span class="site-section sdj-section">Exercises</span><a class="sourcebook-link sdj-source" href="https://studies-de-jure.gitbook.io/learn/">← Back to sourcebook</a></div></header>
+<header class="hero"><div class="case-label">Case study</div><p>A real-case simulation about negligence and business responsibility.</p></header>
 <main class="wrap"><div class="grid"><section class="card" id="main" aria-live="polite"></section><aside class="card aside" aria-label="Simulation progress"><div class="side-title">Case file</div><div style="font-weight:800;margin-top:6px;color:#143f68">Retail customer injury</div><div class="progress" aria-label="Progress"><span id="bar"></span></div><div class="micro" id="progressText"></div><ol class="timeline" id="timeline"></ol><div class="panel dark micro">Your answers are kept in this browser tab only. Nothing is sent to a server. Export your analysis before closing the tab.</div></aside></div></main>
 <script>
 'use strict';
@@ -100,3 +102,4 @@ document.addEventListener('change',e=>{if(e.target.matches('input[type="radio"],
 render();
 </script>
 </body></html>
+

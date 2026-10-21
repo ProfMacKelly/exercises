@@ -18,7 +18,7 @@ class Element{
  querySelectorAll(tag){return this.children.flatMap(c=>[...(c.tag===tag?[c]:[]),...c.querySelectorAll(tag)]);}
 }
 function environment(storage=new Map()){
- const ids={};for(const id of fs.readFileSync(path.join(root,'editor.html'),'utf8').matchAll(/id="([^"]+)"/g))ids[id[1]]=new Element('div');
+ const ids={};for(const id of fs.readFileSync(path.join(root,'z_editor.html'),'utf8').matchAll(/id="([^"]+)"/g))ids[id[1]]=new Element('div');
  for(const id of ['question','diagram','trail','back','restart','zoom-in','zoom-out','zoom-reset','workspace','exercise-title','exercise-subject','exercise-intro','brand-link','exercise-scope','exercise-references','exercise-data'])ids[id] ||= new Element('div');
  const modes=['both','text','diagram'].map(v=>{const b=new Element('button');b.dataset.view=v;return b;});
  const document={body:new Element('body'),createElement:t=>new Element(t),createElementNS:(_,t)=>new Element(t),createTextNode:t=>{const el=new Element('text');el.textContent=t;return el;},getElementById:id=>ids[id],querySelectorAll:()=>modes};
@@ -76,7 +76,7 @@ test('invalid projects and unsuitable export names produce actionable messages',
  await env.input('filename','../wrong.html');await env.ids['export-html'].click();assert.equal(env.downloads.length,0);assert.match(env.ids['save-status'].textContent,/filename/);
 });
 test('generated template exactly matches the current student runtime and CSS',()=>{
- const env=boot(),t=env.window.STUDENT_TEMPLATE;assert.equal(t.css,fs.readFileSync(path.join(root,'assets/fonts.css'),'utf8')+'\n'+fs.readFileSync(path.join(root,'assets/styles.css'),'utf8'));
+ const env=boot(),t=env.window.STUDENT_TEMPLATE;assert.equal(t.css,['fonts.css','styles.css','theme.css'].map(f=>fs.readFileSync(path.join(root,'assets',f),'utf8')).join('\n'));
  assert.equal(t.js,['model.js','markdown.js','app.js'].map(f=>fs.readFileSync(path.join(root,'assets',f),'utf8')).join('\n'));
 });
 test('the standalone editor boots with its embedded assets and exports a student exercise',async()=>{
@@ -84,3 +84,4 @@ test('the standalone editor boots with its embedded assets and exports a student
  assert.equal(env.ids['page-title'].value,'Did the defendant owe the plaintiff a duty of care?');assert.match(env.ids.preview.srcdoc,/exercise-data/);
  let downloaded;env.window.ExerciseExport.download=(name,content)=>downloaded={name,content};await env.ids['export-html'].click();assert.equal(downloaded.name,'negligence.html');assert.match(downloaded.content,/scope of liability/);
 });
+
