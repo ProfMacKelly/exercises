@@ -3,3 +3,24 @@ main{max-width:1400px;margin:auto;padding:38px 5vw}.intro h1{font:700 clamp(30px
 .markdown h3,.markdown h4,.markdown h5{font-family:var(--body-font);font-size:18px;line-height:1.4;margin:22px 0 10px}.markdown p:first-child{margin-top:0}.markdown p:last-child{margin-bottom:0}.markdown a{color:var(--green);overflow-wrap:anywhere}.markdown blockquote{border-left:3px solid var(--line);padding-left:16px;margin-left:0;color:var(--muted)}.markdown pre{overflow:auto;background:var(--paper);padding:14px;border-radius:6px}.markdown code{background:var(--paper);padding:2px 4px}svg a text{pointer-events:none}
 
 pre,code,kbd{font-family:var(--mono-font)}.markdown h3,.markdown h4,.markdown h5{font-weight:600}.intro h1{letter-spacing:-.025em}.eyebrow{font-weight:600}.site-header .brand{font-weight:600}
+
+/* Studies De Jure: GitBook Bold theme, Inter typography and semantic colors. */
+:root{--paper:#fff;--ink:#1b2f40;--muted:#5b6a76;--accent:#0B4779;--accent-hover:#053966;--success:#2C5E36;--warning:#FE9A00;--danger:#FB2C36}
+body{font-size:16px;line-height:1.75;-webkit-font-smoothing:antialiased}
+header.site-header,.site-header-inner{min-height:80px}
+.site-header-inner{padding-top:16px;padding-bottom:16px}
+.site-header .brand{display:inline-flex;align-items:center;gap:12px;font-size:20px;line-height:28px;font-weight:600;letter-spacing:normal}
+.brand-icon{display:block;width:32px;height:32px;object-fit:contain;flex:none}
+.site-section,.sourcebook-link{font-size:14px}
+.intro h1{font-size:36px;line-height:1.25;letter-spacing:-.025em;font-weight:700}
+#question h2{font-size:24px;line-height:1.4;letter-spacing:-.015em}
+.eyebrow,.trail h2{font-size:14px;font-weight:500;letter-spacing:normal;text-transform:none;color:var(--muted)}
+.question-panel,.map-panel{border-radius:12px;box-shadow:0 1px 2px #0b477908}
+.map-heading h2{font-size:22px}
+#diagram,.scenario,.markdown pre,.markdown code{background:#f6f8fa}
+button{font-size:14px;font-weight:500}
+.choice{font-size:16px}
+.outcome.success{background:#e9f3eb;color:var(--success)}
+.outcome.failure{background:#fff0f1;color:#a51c26}
+@media(max-width:800px){.site-header .brand{font-size:20px}.intro h1{font-size:30px}#question h2{font-size:22px}.sourcebook-link{margin-left:0}.site-header-inner{column-gap:12px}}
+

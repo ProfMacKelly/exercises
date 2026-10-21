@@ -7,8 +7,10 @@
   try { tree = validate(tree); } catch (e) { $('question').textContent = `Cannot load exercise: ${e.message}`; return; }
   const key = 'exercise-v2:' + tree.title + ':' + location.pathname;
   const md = text => window.ExerciseMarkdown.render(text);
+  // Editorial labels use sentence case; preserve labels containing mixed-case names.
+  const sentenceLabel = value => String(value).split(' · ').map(part => part === part.toUpperCase() ? part.toLowerCase().replace(/[a-z]/, ch => ch.toUpperCase()) : part).join(' · ');
   if($('exercise-title'))$('exercise-title').textContent=tree.title;
-  if($('exercise-subject'))$('exercise-subject').textContent=tree.subject || 'INTERACTIVE EXERCISE';
+  if($('exercise-subject'))$('exercise-subject').textContent=sentenceLabel(tree.subject || 'Interactive exercise');
   if($('exercise-intro'))$('exercise-intro').textContent=tree.intro || 'Follow the questions, explain your reasoning, and trace the result.';
   if($('brand-link'))$('brand-link').href=`#/${tree.start}`;
   if($('exercise-scope'))$('exercise-scope').textContent=tree.scope || 'A teaching exercise. Apply the relevant rules and exceptions.';
@@ -49,9 +51,9 @@
     const n=nodes.get(id), s=state(), q=$('question');q.replaceChildren();
     document.title=`${n.label.replaceAll('\n',' — ')} | ${tree.title}`;
     if(invalid)q.append(make('p','That page was not found. The exercise has returned to its start.','status'));
-    q.append(make('p',n.category || 'ANALYSIS RESULT','eyebrow'));
+    q.append(make('p',sentenceLabel(n.category || 'Analysis result'),'eyebrow'));
     const h=make('h2',n.title);h.tabIndex=-1;q.append(h);
-    if(n.type)q.append(make('span',n.type==='success'?'Positive outcome':n.type==='failure'?'Negative outcome':'Outcome','outcome'));
+    if(n.type)q.append(make('span',n.type==='success'?'Positive outcome':n.type==='failure'?'Negative outcome':'Outcome','outcome '+n.type));
     q.append(md(n.body));
     const scenario=make('details',undefined,'scenario');scenario.append(make('summary','Practice scenario'),md(tree.scenario));if(tree.scenario)q.append(scenario);
     if(n.prompt){const reason=make('div',undefined,'reason');reason.append(make('strong','Explain your reasoning'),md(n.prompt));q.append(reason);}
@@ -77,3 +79,4 @@
   if(history.state?.exercise!==key)history.replaceState({exercise:key,trail:[],depth:0,exploring:false},'');
   render();
 })();
+
